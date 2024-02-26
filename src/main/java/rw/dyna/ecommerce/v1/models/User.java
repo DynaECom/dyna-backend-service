@@ -18,6 +18,7 @@ import java.util.UUID;
 @Setter
 @Entity()
 @Table(name="users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"}), @UniqueConstraint(columnNames = {"phone_number"})})
+@Inheritance(strategy = InheritanceType.JOINED)
 @OnDelete(action = OnDeleteAction.CASCADE)
 public class User {
 
