@@ -10,6 +10,7 @@ import rw.dyna.ecommerce.v1.utils.Utility;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,6 +35,9 @@ public class User {
 
     @Column(name="phone_number")
     private String phoneNumber;
+
+    @ManyToMany()
+    private List<LocationAddress> locationAddressList;
 
     @Column(name = "password")
     private String password;

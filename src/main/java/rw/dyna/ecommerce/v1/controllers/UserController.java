@@ -27,13 +27,13 @@ public class UserController {
 
     @PostMapping(path="/register")
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody CreateAccountDto user){
-            return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(userService.registerUser(user)));
+            return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(userService.registerUser(user), "User registered successfully!"));
 
     }
 
     @PostMapping(path="/register-admin")
     public ResponseEntity<ApiResponse>  registerAdmin(@Valid @RequestBody RegisterAdminDto dto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(userService.registerAdmin(dto)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(userService.registerAdmin(dto), "Admin account created successfully!"));
     }
 
     @PostMapping(path = "/verify-email")
