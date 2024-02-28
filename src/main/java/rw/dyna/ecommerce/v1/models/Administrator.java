@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Getter
@@ -14,5 +15,6 @@ import javax.persistence.Table;
 @Table(name = "administrator")
 @NoArgsConstructor
 @AllArgsConstructor
+@PrimaryKeyJoinColumn(name ="user_id", referencedColumnName = "id")
 public class Administrator extends User{
 }
