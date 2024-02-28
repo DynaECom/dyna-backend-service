@@ -92,8 +92,6 @@ public class User {
     private Set<Address> address = new HashSet<>();
 
 
-
-
     public String fullName(){
         return this.firstName + " " +this.lastName;
     }
