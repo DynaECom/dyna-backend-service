@@ -13,8 +13,9 @@ import javax.persistence.Table;
 @Setter
 @Entity
 @Table(name = "administrator")
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 @PrimaryKeyJoinColumn(name ="user_id", referencedColumnName = "id")
 public class Administrator extends User{
+
 }

@@ -36,7 +36,7 @@ public class User {
     @Column(name="phone_number")
     private String phoneNumber;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<LocationAddress> locationAddressList;
 
     @Column(name = "password")
@@ -48,6 +48,12 @@ public class User {
     @JsonIgnore
     @Column(name="activation_code")
     private String activationCode = Utility.randomUUID(6, 0, 'N');
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
 
     public User(String firstName, String lastName, String email, String phone_number, EUserStatus status, String activationCode, Set<Role> eroles) {
         this.firstName = firstName;
@@ -80,10 +86,6 @@ public class User {
 
     }
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
 
     @OneToMany
     @JoinTable(name = "user_address", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "address_id"))

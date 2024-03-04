@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "client")
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")
 public class Client extends User{
 

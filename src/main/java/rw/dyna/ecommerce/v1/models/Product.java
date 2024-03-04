@@ -21,8 +21,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Product extends InitiatorAudit {
 
-    @GeneratedValue()
     @Id
+    @GeneratedValue()
     private UUID id;
 
     private String name;

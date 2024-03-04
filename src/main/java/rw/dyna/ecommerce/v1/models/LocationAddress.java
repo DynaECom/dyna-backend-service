@@ -1,7 +1,10 @@
 package rw.dyna.ecommerce.v1.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
 import rw.dyna.ecommerce.v1.enums.ELocationType;
 import javax.persistence.*;
@@ -13,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name="location_address")
-public class LocationAddress  extends InitiatorAudit {
+public class LocationAddress extends InitiatorAudit {
 
     @Id
     @Column(name="location_id")
@@ -33,14 +36,12 @@ public class LocationAddress  extends InitiatorAudit {
     @Column(name ="name_kiny")
     private String nameKiny;
 
+    @Transient
+    private List<LocationAddress> residentialAddress;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "parent_id")
     private LocationAddress parentId;
-
-    @ManyToMany
-    @JoinTable(name="user_location_address", joinColumns = @JoinColumn(name = "location_address_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> user;
 
 }
