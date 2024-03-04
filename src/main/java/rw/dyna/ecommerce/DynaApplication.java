@@ -30,7 +30,7 @@ public class DynaApplication {
 	public void registerRoles(){
 		Set<Erole> roles = new HashSet<>();
 		roles.add(Erole.ADMIN);
-		roles.add(Erole.USER);
+		roles.add(Erole.CLIENT);
 
 
 		for (Erole role: roles){

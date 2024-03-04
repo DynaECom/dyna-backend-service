@@ -60,7 +60,7 @@ public class UserServiceImpl implements IUserServices {
     public User registerUser(CreateAccountDto dto) {
         User user = new User();
         String encodePassword = bCryptPasswordEncoder.encode(dto.getPassword());
-        Role role = roleService.findByName(Erole.USER);
+        Role role = roleService.findByName(dto.getRole());
         user.setEmail(dto.getEmail());
         user.setLastName(dto.getLastName());
         user.setFirstName(dto.getFirstName());
