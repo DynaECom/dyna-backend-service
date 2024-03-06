@@ -22,4 +22,6 @@ public class Client extends User{
     @OneToMany(mappedBy = "client", fetch =  FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> review;
 
+
+
 }

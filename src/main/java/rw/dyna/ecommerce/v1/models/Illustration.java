@@ -2,6 +2,7 @@ package rw.dyna.ecommerce.v1.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
 import rw.dyna.ecommerce.v1.fileHandling.File;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Illustration {
+public class Illustration extends InitiatorAudit {
     @Id
     @GeneratedValue
     private UUID id;

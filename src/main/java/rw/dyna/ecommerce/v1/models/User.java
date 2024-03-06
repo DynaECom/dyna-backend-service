@@ -3,6 +3,7 @@ package rw.dyna.ecommerce.v1.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
 import rw.dyna.ecommerce.v1.enums.EUserStatus;
 import rw.dyna.ecommerce.v1.utils.Utility;
 
@@ -17,7 +18,7 @@ import java.util.UUID;
 @Entity
 @Table(name="users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"}), @UniqueConstraint(columnNames = {"phone_number"})})
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public class User extends InitiatorAudit {
 
     @Id
     @GeneratedValue

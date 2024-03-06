@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="delivery")
-public class Delivery {
+public class Delivery extends InitiatorAudit {
     @Id()
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
