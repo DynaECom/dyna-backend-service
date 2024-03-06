@@ -10,4 +10,7 @@ public class Order {
     @Id()
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
+    @ManyToOne
+    private Client client;
 }

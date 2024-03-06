@@ -16,10 +16,10 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")
 public class Client extends User{
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "client", fetch =  FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", fetch =  FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> review;
 
 }
