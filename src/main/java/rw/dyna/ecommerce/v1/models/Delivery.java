@@ -18,4 +18,14 @@ public class Delivery {
     @Id()
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
+    @ManyToOne
+    private Client client;
+
+    @OneToOne
+    private Order order;
+
+    @ManyToOne
+    private LocationAddress deliveryLocation;
+
 }
