@@ -54,6 +54,8 @@ public class Product extends InitiatorAudit {
     @JoinColumn(name = "manufacturer")
     private Manufacturer manufacturer;
 
+    @OneToMany(mappedBy = "product", fetch =  FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Review> review;
 
     public Product(CreateProductDto dto, Manufacturer manufacturer, SubCategory subCategory) {
         this.name = dto.getName();

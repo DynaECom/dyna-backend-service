@@ -5,17 +5,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "client")
 @NoArgsConstructor
-//@AllArgsConstructor
 @PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")
 public class Client extends User{
+
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "client", fetch =  FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Review> review;
 
 }

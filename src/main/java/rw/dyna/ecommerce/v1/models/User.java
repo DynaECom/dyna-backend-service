@@ -3,8 +3,6 @@ package rw.dyna.ecommerce.v1.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import rw.dyna.ecommerce.v1.enums.EUserStatus;
 import rw.dyna.ecommerce.v1.utils.Utility;
 
