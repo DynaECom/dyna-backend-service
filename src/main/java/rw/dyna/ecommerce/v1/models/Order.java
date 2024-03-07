@@ -1,6 +1,7 @@
 package rw.dyna.ecommerce.v1.models;
 
 import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
+import rw.dyna.ecommerce.v1.enums.EOrderStatus;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -15,4 +16,16 @@ public class Order extends InitiatorAudit {
 
     @ManyToOne
     private Client client;
+
+    private int quantity;
+    @ManyToOne
+    private Product product;
+
+    private EOrderStatus status;
+
+    private String orderCode;
+    
+
+
+
 }
