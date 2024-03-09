@@ -35,7 +35,7 @@ public class User extends InitiatorAudit {
     @Column(name="phone_number")
     private String phoneNumber;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<LocationAddress> locationAddressList;
 
     @Column(name = "password")

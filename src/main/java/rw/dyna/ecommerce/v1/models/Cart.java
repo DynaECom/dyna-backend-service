@@ -3,6 +3,7 @@ package rw.dyna.ecommerce.v1.models;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
+import rw.dyna.ecommerce.v1.enums.ECartStatus;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,4 +21,12 @@ public class Cart extends InitiatorAudit {
     @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<CartProduct> cartProducts;
 
+    private ECartStatus cartStatus;
+
+    @ManyToOne
+    private Client client;
+
+    @Transient
+    private float totalPrice;
+    
 }
