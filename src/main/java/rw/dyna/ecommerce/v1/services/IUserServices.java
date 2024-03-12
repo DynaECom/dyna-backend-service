@@ -6,6 +6,8 @@ import rw.dyna.ecommerce.v1.dtos.UpdateUserDto;
 import rw.dyna.ecommerce.v1.models.User;
 
 public interface IUserServices {
+
+    void validateNewRegistration(User user);
     User registerUser(CreateAccountDto user);
     User registerAdmin(RegisterAdminDto dto);
 

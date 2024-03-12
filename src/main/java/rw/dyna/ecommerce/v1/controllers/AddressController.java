@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import rw.dyna.ecommerce.v1.dtos.CreateAddressDto;
+import rw.dyna.ecommerce.v1.dtos.CreateAddressDTO;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
 import rw.dyna.ecommerce.v1.services.IAddressService;
 
@@ -25,7 +25,7 @@ public class AddressController {
     }
 
     @PostMapping(path="/create")
-    public ResponseEntity<ApiResponse> createAddress(@Valid @RequestBody CreateAddressDto dto){
+    public ResponseEntity<ApiResponse> createAddress(@Valid @RequestBody CreateAddressDTO dto){
         System.out.println("dto");
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(addressService.createAddress(dto)));
     }
@@ -36,7 +36,7 @@ public class AddressController {
     }
 
     @PutMapping(path= "/update")
-    public ResponseEntity<ApiResponse> updateAddress(@Valid @RequestBody CreateAddressDto dto, @RequestParam UUID id){
+    public ResponseEntity<ApiResponse> updateAddress(@Valid @RequestBody CreateAddressDTO dto, @RequestParam UUID id){
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(addressService.updateAddress(id, dto)));
     }
 

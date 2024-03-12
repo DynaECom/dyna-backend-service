@@ -1,7 +1,7 @@
 package rw.dyna.ecommerce.v1.servicesImpl;
 
 import org.springframework.stereotype.Service;
-import rw.dyna.ecommerce.v1.dtos.CreateAddressDto;
+import rw.dyna.ecommerce.v1.dtos.CreateAddressDTO;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
 import rw.dyna.ecommerce.v1.models.Address;
 import rw.dyna.ecommerce.v1.models.User;
@@ -24,7 +24,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public Address createAddress(CreateAddressDto dto) {
+    public Address createAddress(CreateAddressDTO dto) {
         Address address = new Address(dto);
         User user = userService.getLoggedInUser();
         address.setUser(user);
@@ -33,7 +33,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public Address updateAddress(UUID id, CreateAddressDto dto) {
+    public Address updateAddress(UUID id, CreateAddressDTO dto) {
         Address address = addressRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Address", "Cell", dto.getCell()));
         address.setStreetName(dto.getStreetName());
         address.setCountry(dto.getCountry());

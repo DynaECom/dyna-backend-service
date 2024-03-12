@@ -3,6 +3,7 @@ package rw.dyna.ecommerce.v1.utils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import rw.dyna.ecommerce.v1.models.Client;
 import rw.dyna.ecommerce.v1.models.User;
 
 
@@ -18,6 +19,12 @@ public class Mapper {
         return user;
     }
 
+    public static Client getClientFromDTO(Object object, String password){
+        Client client = modelMapper.map(object, Client.class);
+        client.setPassword(passwordEncoder.encode(password));
+        client.setId(null);
+        return client;
+    }
 
     public static String encode(String raw){
         return passwordEncoder.encode(raw);
@@ -26,8 +33,6 @@ public class Mapper {
     public static boolean compare(String encoded, String raw){
         return passwordEncoder.matches(raw, encoded);
     }
-
-
 
     public static User getUserFromDTO(Object object) {
         return modelMapper.map(object, User.class);

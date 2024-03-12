@@ -24,5 +24,4 @@ public class Client extends User{
 
     @OneToOne
     private Client client;
-
 }
