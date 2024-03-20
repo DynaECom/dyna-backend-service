@@ -22,8 +22,6 @@ public class CreateAccountDto {
     @NotBlank
     private String lastName;
 
-     private EGender gender;
-
     @Email
     private String email;
 

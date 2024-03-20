@@ -21,10 +21,7 @@ import rw.dyna.ecommerce.v1.security.JwtAuthenticationFilter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter {
-
-
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
-
     private final CustomUserDetailsService customUserDetailsService;
     @Autowired
     public WebSecurity(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, CustomUserDetailsService customUserDetailsService) {
@@ -43,12 +40,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
     }
-
 
     @Bean()
     @Override
@@ -92,8 +87,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         "/api/v1/users/verify-email",
                         "/api/v1/auth/forgot-password",
                         "/api/v1/auth/reset-password",
-                        "/api/v1/auth/verify-code"
-
+                        "/api/v1/auth/verify-code",
+                        "/api/v1/client/create"
                 ).permitAll()
                 .antMatchers(
                         "/v2/api-docs",

@@ -1,11 +1,14 @@
 package rw.dyna.ecommerce.v1.servicesImpl;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import rw.dyna.ecommerce.v1.dtos.CreateAccountDto;
+import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
 import rw.dyna.ecommerce.v1.models.Client;
 import rw.dyna.ecommerce.v1.models.Role;
+import rw.dyna.ecommerce.v1.repositories.IClientRepository;
 import rw.dyna.ecommerce.v1.repositories.IUserRepository;
 import rw.dyna.ecommerce.v1.services.IClientService;
 import rw.dyna.ecommerce.v1.services.IRoleService;
@@ -14,21 +17,21 @@ import rw.dyna.ecommerce.v1.utils.Mapper;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ClientServiceImpl implements IClientService {
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
     private final IUserServices userService;
-
     private final IUserRepository userRepository;
+    private final IClientRepository clientRepository;
     private final IRoleService roleService;
 
-    public ClientServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, IUserServices userService, IUserRepository userRepository, IRoleService roleService) {
+    public ClientServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, IUserServices userService, IUserRepository userRepository, IClientRepository clientRepository, IRoleService roleService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userService = userService;
         this.userRepository = userRepository;
+        this.clientRepository = clientRepository;
         this.roleService = roleService;
     }
 
@@ -48,18 +51,21 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public Client getClientById() {
-        return null;
+    public Client getClientById(UUID id) {
+        Client client  = clientRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("client", "id", id.toString()));
+        return client;
     }
 
     @Override
-    public Client deleteClientById() {
-        return null;
+    public Client deleteClientById(UUID id) {
+        Client client = this.getClientById(id);
+        clientRepository.deleteById(id);
+        return client;
     }
 
     @Override
     public List<Client> getAllClients() {
-        return null;
+        return clientRepository.findAll();
     }
 
     @Override
@@ -68,7 +74,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public Page<Client> getClientsPaginated() {
-        return null;
+    public Page<Client> getClientsPaginated(Pageable pageable) {
+        return clientRepository.findAll(pageable);
     }
 }
