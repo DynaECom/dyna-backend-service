@@ -36,7 +36,10 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(clientService.getAllClients()));
     }
 
-    @GetMapping("/paginated")
+    /*
+    * Get all clients paginated
+     */
+    @GetMapping("/paginated/{limit}/{page}")
     public ResponseEntity<ApiResponse> getAllClientsPaginated(@PathVariable("limit") int limit, @PathVariable("page") int page){
         Pageable pageable = PageRequest.of(page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(clientService.getClientsPaginated(pageable)));

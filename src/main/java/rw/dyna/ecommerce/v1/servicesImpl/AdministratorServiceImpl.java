@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.dtos.RegisterAdminDto;
 import rw.dyna.ecommerce.v1.dtos.UpdateUserDto;
 import rw.dyna.ecommerce.v1.enums.Erole;
@@ -16,6 +17,7 @@ import rw.dyna.ecommerce.v1.models.Role;
 import rw.dyna.ecommerce.v1.repositories.IAdministratorRepository;
 import rw.dyna.ecommerce.v1.repositories.IUserRepository;
 import rw.dyna.ecommerce.v1.services.IAdministratorService;
+import rw.dyna.ecommerce.v1.services.IFileService;
 import rw.dyna.ecommerce.v1.services.IRoleService;
 import rw.dyna.ecommerce.v1.services.IUserServices;
 import rw.dyna.ecommerce.v1.utils.Mapper;
@@ -31,15 +33,21 @@ public class AdministratorServiceImpl implements IAdministratorService {
     private final IUserServices userService;
     private final IUserRepository userRepository;
     private final IAdministratorRepository administratorRepository;
+
+    private final IFileService fileService;
     private final IRoleService roleService;
     @Value("${admin_registration_key}")
     private String adminRegistrationKey;
 
-    public AdministratorServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, IUserServices userService, IUserRepository userRepository, IAdministratorRepository administratorRepository, IRoleService roleService) {
+    @Value("${uploads_directory")
+    private String uploadsDirectory;
+
+    public AdministratorServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, IUserServices userService, IUserRepository userRepository, IAdministratorRepository administratorRepository, IFileService fileService, IRoleService roleService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userService = userService;
         this.userRepository = userRepository;
         this.administratorRepository = administratorRepository;
+        this.fileService = fileService;
         this.roleService = roleService;
     }
 
@@ -95,5 +103,13 @@ public class AdministratorServiceImpl implements IAdministratorService {
     @Override
     public Page<Administrator> getAdministratorPaginated(Pageable pageable) {
         return administratorRepository.findAll(pageable);
+    }
+
+    @Override
+    public Administrator addIdentificationFile(UUID id, MultipartFile file) {
+        Administrator administrator = this.getAdministratorById(id);
+        File saveFile = fileService.create(file, uploadsDirectory);
+        administrator.setIdentityDocument(saveFile);
+        return administratorRepository.save(administrator);
     }
 }

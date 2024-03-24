@@ -30,7 +30,7 @@ public class AdministratorController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(administratorService.getAllAdministrators()));
     }
 
-    @GetMapping("/paginated")
+    @GetMapping("/paginated/{limit}/{page}")
     public ResponseEntity<ApiResponse> getAllAdministratorsPaginated(@PathVariable("limit") int limit, @PathVariable("page") int page){
         Pageable pageable = PageRequest.of(page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(administratorService.getAdministratorPaginated(pageable)));
@@ -45,9 +45,9 @@ public class AdministratorController {
     public ResponseEntity<ApiResponse> deleteById(@PathVariable("id") UUID id){
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success( administratorService.deleteAdministratorById(id)));
     }
-    @PostMapping("/update-file")
-    public ResponseEntity<ApiResponse> updateFile(@RequestParam MultipartFile file){
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    @PostMapping("/update-file/{id}")
+    public ResponseEntity<ApiResponse> updateFile(@RequestParam MultipartFile file, @PathVariable("id") UUID id){
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(administratorService.addIdentificationFile(id, file)));
     }
 
     @PostMapping("/add-address")

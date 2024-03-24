@@ -3,6 +3,7 @@ package rw.dyna.ecommerce.v1.services;
 import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.dtos.CreateAccountDto;
 import rw.dyna.ecommerce.v1.dtos.RegisterAdminDto;
 import rw.dyna.ecommerce.v1.dtos.UpdateUserDto;
@@ -19,4 +20,6 @@ public interface IAdministratorService {
     List<Administrator> getAllAdministrators();
     Administrator updateAdministrator(UUID id, UpdateUserDto dto, File file);
     Page<Administrator> getAdministratorPaginated(Pageable pageable);
+
+    Administrator addIdentificationFile(UUID id, MultipartFile file);
 }

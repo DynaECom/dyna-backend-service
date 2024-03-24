@@ -1,5 +1,6 @@
 package rw.dyna.ecommerce.v1.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +18,11 @@ import java.util.List;
 public class Client extends User{
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Order> orders;
 
     @OneToMany(mappedBy = "client", fetch =  FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Review> review;
 
     @OneToOne

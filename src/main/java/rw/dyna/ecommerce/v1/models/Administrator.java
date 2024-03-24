@@ -18,5 +18,6 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @PrimaryKeyJoinColumn(name ="user_id", referencedColumnName = "id")
 public class Administrator extends User{
+
     private File identityDocument;
 }
