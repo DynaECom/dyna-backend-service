@@ -88,7 +88,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         "/api/v1/auth/forgot-password",
                         "/api/v1/auth/reset-password",
                         "/api/v1/auth/verify-code",
-                        "/api/v1/client/create"
+                        "/api/v1/client/create",
+                        "/api/v1/administrator/create"
                 ).permitAll()
                 .antMatchers(
                         "/v2/api-docs",

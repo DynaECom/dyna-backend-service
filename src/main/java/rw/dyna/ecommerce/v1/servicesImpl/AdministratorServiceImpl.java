@@ -1,18 +1,19 @@
 package rw.dyna.ecommerce.v1.servicesImpl;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import rw.dyna.ecommerce.v1.dtos.CreateAccountDto;
+import rw.dyna.ecommerce.v1.dtos.RegisterAdminDto;
 import rw.dyna.ecommerce.v1.dtos.UpdateUserDto;
+import rw.dyna.ecommerce.v1.enums.Erole;
+import rw.dyna.ecommerce.v1.exceptions.BadRequestException;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
 import rw.dyna.ecommerce.v1.fileHandling.File;
 import rw.dyna.ecommerce.v1.models.Administrator;
-import rw.dyna.ecommerce.v1.models.Client;
 import rw.dyna.ecommerce.v1.models.Role;
 import rw.dyna.ecommerce.v1.repositories.IAdministratorRepository;
-import rw.dyna.ecommerce.v1.repositories.IClientRepository;
 import rw.dyna.ecommerce.v1.repositories.IUserRepository;
 import rw.dyna.ecommerce.v1.services.IAdministratorService;
 import rw.dyna.ecommerce.v1.services.IRoleService;
@@ -21,6 +22,7 @@ import rw.dyna.ecommerce.v1.utils.Mapper;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -30,6 +32,8 @@ public class AdministratorServiceImpl implements IAdministratorService {
     private final IUserRepository userRepository;
     private final IAdministratorRepository administratorRepository;
     private final IRoleService roleService;
+    @Value("${admin_registration_key}")
+    private String adminRegistrationKey;
 
     public AdministratorServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, IUserServices userService, IUserRepository userRepository, IAdministratorRepository administratorRepository, IRoleService roleService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -40,11 +44,16 @@ public class AdministratorServiceImpl implements IAdministratorService {
     }
 
     @Override
-    public Administrator createAdministrator(CreateAccountDto dto) {
+    public Administrator createAdministrator(RegisterAdminDto dto) {
         Administrator administrator = Mapper.getAdministratorFromDTO(dto, dto.getPassword());
         userService.validateNewRegistration(administrator);
+        if(!Objects.equals(dto.getKey(), adminRegistrationKey)) {
+            System.out.println(adminRegistrationKey);
+            System.out.println("key " + dto.getKey());
+            throw new BadRequestException("Invalid registration key");
+        }
         String encodePassword = bCryptPasswordEncoder.encode(dto.getPassword());
-        Role role = roleService.findByName(dto.getRole());
+        Role role = roleService.findByName(Erole.ADMIN);
         administrator.setEmail(dto.getEmail());
         administrator.setLastName(dto.getLastName());
         administrator.setFirstName(dto.getFirstName());

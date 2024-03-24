@@ -27,7 +27,6 @@ public class RegisterAdminDto {
     @ValidPassword
     private String password;
 
-
     private String key;
 
     @NotBlank

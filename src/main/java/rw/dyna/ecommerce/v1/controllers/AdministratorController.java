@@ -1,10 +1,13 @@
 package rw.dyna.ecommerce.v1.controllers;
+import io.swagger.annotations.Api;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.dtos.CreateAccountDto;
+import rw.dyna.ecommerce.v1.dtos.RegisterAdminDto;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
 import rw.dyna.ecommerce.v1.services.IAdministratorService;
 import java.util.UUID;
@@ -19,7 +22,7 @@ public class AdministratorController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createAdministrator(@RequestBody CreateAccountDto dto){
+    public ResponseEntity<ApiResponse> createAdministrator(@RequestBody RegisterAdminDto dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(administratorService.createAdministrator(dto)));
     }
     @GetMapping("/")
@@ -42,4 +45,14 @@ public class AdministratorController {
     public ResponseEntity<ApiResponse> deleteById(@PathVariable("id") UUID id){
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success( administratorService.deleteAdministratorById(id)));
     }
+    @PostMapping("/update-file")
+    public ResponseEntity<ApiResponse> updateFile(@RequestParam MultipartFile file){
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
+    @PostMapping("/add-address")
+    public ResponseEntity<ApiResponse> addAddress(@RequestParam UUID id, @RequestParam UUID addressId){
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
+    }
+
 }
