@@ -3,6 +3,7 @@ package rw.dyna.ecommerce.v1.utils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import rw.dyna.ecommerce.v1.models.Administrator;
 import rw.dyna.ecommerce.v1.models.Client;
 import rw.dyna.ecommerce.v1.models.User;
 
@@ -24,6 +25,13 @@ public class Mapper {
         client.setPassword(passwordEncoder.encode(password));
         client.setId(null);
         return client;
+    }
+
+    public static Administrator getAdministratorFromDTO(Object object, String password){
+        Administrator administrator = modelMapper.map(object, Administrator.class);
+        administrator.setPassword(passwordEncoder.encode(password));
+        administrator.setId(null);
+        return administrator;
     }
 
     public static String encode(String raw){

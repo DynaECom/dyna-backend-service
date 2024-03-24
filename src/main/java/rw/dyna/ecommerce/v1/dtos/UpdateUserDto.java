@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rw.dyna.ecommerce.v1.fileHandling.File;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

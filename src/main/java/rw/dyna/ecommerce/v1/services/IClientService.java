@@ -11,9 +11,7 @@ import java.util.UUID;
 
 public interface IClientService {
     Client createClient(CreateAccountDto dto);
-
     Client getClientById(UUID id);
-
     Client deleteClientById(UUID id);
     List<Client> getAllClients();
 
