@@ -18,7 +18,7 @@ public interface IAdministratorService {
     Administrator getAdministratorById(UUID id);
     Administrator deleteAdministratorById(UUID id);
     List<Administrator> getAllAdministrators();
-    Administrator updateAdministrator(UUID id, UpdateUserDto dto, File file);
+    Administrator updateAdministrator(UUID id, UpdateUserDto dto);
     Page<Administrator> getAdministratorPaginated(Pageable pageable);
 
     Administrator addIdentificationFile(UUID id, MultipartFile file);

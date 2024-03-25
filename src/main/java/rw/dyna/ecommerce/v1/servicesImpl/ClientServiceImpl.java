@@ -5,12 +5,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import rw.dyna.ecommerce.v1.dtos.CreateAccountDto;
+import rw.dyna.ecommerce.v1.dtos.UpdateUserDto;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
 import rw.dyna.ecommerce.v1.models.Client;
+import rw.dyna.ecommerce.v1.models.LocationAddress;
 import rw.dyna.ecommerce.v1.models.Role;
 import rw.dyna.ecommerce.v1.repositories.IClientRepository;
 import rw.dyna.ecommerce.v1.repositories.IUserRepository;
 import rw.dyna.ecommerce.v1.services.IClientService;
+import rw.dyna.ecommerce.v1.services.ILocationAddressService;
 import rw.dyna.ecommerce.v1.services.IRoleService;
 import rw.dyna.ecommerce.v1.services.IUserServices;
 import rw.dyna.ecommerce.v1.utils.Mapper;
@@ -27,12 +30,15 @@ public class ClientServiceImpl implements IClientService {
     private final IClientRepository clientRepository;
     private final IRoleService roleService;
 
-    public ClientServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, IUserServices userService, IUserRepository userRepository, IClientRepository clientRepository, IRoleService roleService) {
+    private final ILocationAddressService addressService;
+
+    public ClientServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, IUserServices userService, IUserRepository userRepository, IClientRepository clientRepository, IRoleService roleService, ILocationAddressService addressService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userService = userService;
         this.userRepository = userRepository;
         this.clientRepository = clientRepository;
         this.roleService = roleService;
+        this.addressService = addressService;
     }
 
     @Override
@@ -69,12 +75,27 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public Client updateClient() {
-        return null;
+    public Client updateClient( UUID id, UpdateUserDto dto) {
+        Client client = this.getClientById(id);
+        client.setFirstName(dto.getFirstName());
+        client.setLastName(dto.getLastName());
+        client.setPhoneNumber(dto.getPhoneNumber());
+        return clientRepository.save(client);
     }
 
     @Override
     public Page<Client> getClientsPaginated(Pageable pageable) {
         return clientRepository.findAll(pageable);
+    }
+
+    @Override
+    public Client addAddress(UUID userId, long addressId) {
+        Client client = this.getClientById(userId);
+        LocationAddress address = addressService.findById(addressId);
+        List<LocationAddress> clientAddresses = client.getLocationAddressList();
+        clientAddresses.add(address);
+        client.setLocationAddressList(clientAddresses);
+
+        return clientRepository.save(client);
     }
 }

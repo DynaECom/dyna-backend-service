@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CreateAddressDTO {
+public class CreateLocationAddressDTO {
 
     @NotBlank
     public String country;

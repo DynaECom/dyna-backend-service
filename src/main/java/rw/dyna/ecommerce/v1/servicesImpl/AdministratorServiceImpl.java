@@ -90,12 +90,11 @@ public class AdministratorServiceImpl implements IAdministratorService {
     }
 
     @Override
-    public Administrator updateAdministrator(UUID id, UpdateUserDto dto, File file) {
+    public Administrator updateAdministrator(UUID id, UpdateUserDto dto) {
         Administrator administrator = this.getAdministratorById(id);
         administrator.setFirstName(dto.getFirstName());
         administrator.setLastName(dto.getLastName());
         administrator.setPhoneNumber(dto.getPhoneNumber());
-        administrator.setIdentityDocument(file);
 
         return administratorRepository.save(administrator);
     }

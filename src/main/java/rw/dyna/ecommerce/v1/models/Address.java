@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import rw.dyna.ecommerce.v1.dtos.CreateAddressDTO;
+import rw.dyna.ecommerce.v1.dtos.CreateLocationAddressDTO;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -38,7 +38,7 @@ public class Address {
     @JoinColumn(name= "user_id")
     private User user;
 
-    public Address(CreateAddressDTO dto) {
+    public Address(CreateLocationAddressDTO dto) {
         this.setCountry(dto.getCountry());
         this.setProvince(dto.getProvince());
         this.setDistrict(dto.getDistrict());

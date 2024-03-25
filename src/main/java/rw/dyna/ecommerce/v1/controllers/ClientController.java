@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rw.dyna.ecommerce.v1.dtos.CreateAccountDto;
+import rw.dyna.ecommerce.v1.dtos.UpdateUserDto;
 import rw.dyna.ecommerce.v1.enums.EUserStatus;
 import rw.dyna.ecommerce.v1.models.Client;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
@@ -54,4 +55,14 @@ public class ClientController {
     public ResponseEntity<ApiResponse> deleteById(@PathVariable("id") UUID id ){
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(clientService.deleteClientById(id)));
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateClient(@RequestBody UpdateUserDto dto, @PathVariable("id") UUID id){
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(clientService.updateClient(id, dto)));
+    }
+
+    @PutMapping("/add-address/{addressId}/{userId}")
+    public ResponseEntity<ApiResponse> addAddress(@PathVariable("addressId") long addressId, @PathVariable("clientId") UUID userId){
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(clientService.addAddress(userId, addressId)));
+    }
+
 }
