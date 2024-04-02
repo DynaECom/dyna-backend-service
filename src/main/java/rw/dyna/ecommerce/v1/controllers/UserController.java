@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rw.dyna.ecommerce.v1.dtos.*;
+import rw.dyna.ecommerce.v1.models.Profile;
 import rw.dyna.ecommerce.v1.models.User;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
 import rw.dyna.ecommerce.v1.services.IUserServices;
@@ -44,8 +45,8 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseEntity<ApiResponse> getProfile(){
-        User user = userService.getLoggedInUser();
-        return ResponseEntity.ok(ApiResponse.success(user));
+        Profile profile = userService.getLoggedInProfile();
+        return ResponseEntity.ok(ApiResponse.success(profile));
     }
 
     @DeleteMapping(path="/delete-account")

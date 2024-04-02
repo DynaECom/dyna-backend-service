@@ -10,6 +10,7 @@ import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
 import rw.dyna.ecommerce.v1.models.Client;
 import rw.dyna.ecommerce.v1.models.LocationAddress;
 import rw.dyna.ecommerce.v1.models.Role;
+import rw.dyna.ecommerce.v1.models.User;
 import rw.dyna.ecommerce.v1.repositories.IClientRepository;
 import rw.dyna.ecommerce.v1.repositories.IUserRepository;
 import rw.dyna.ecommerce.v1.services.IClientService;
@@ -29,7 +30,6 @@ public class ClientServiceImpl implements IClientService {
     private final IUserRepository userRepository;
     private final IClientRepository clientRepository;
     private final IRoleService roleService;
-
     private final ILocationAddressService addressService;
 
     public ClientServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, IUserServices userService, IUserRepository userRepository, IClientRepository clientRepository, IRoleService roleService, ILocationAddressService addressService) {
@@ -97,5 +97,10 @@ public class ClientServiceImpl implements IClientService {
         client.setLocationAddressList(clientAddresses);
 
         return clientRepository.save(client);
+    }
+
+    @Override
+    public Client findByUser(User theUser) {
+        return this.getClientById(theUser.getId());
     }
 }

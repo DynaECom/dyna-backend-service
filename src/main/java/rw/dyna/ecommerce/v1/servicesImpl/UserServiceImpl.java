@@ -1,6 +1,7 @@
 package rw.dyna.ecommerce.v1.servicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,9 +14,11 @@ import rw.dyna.ecommerce.v1.enums.EUserStatus;
 import rw.dyna.ecommerce.v1.enums.Erole;
 import rw.dyna.ecommerce.v1.exceptions.BadRequestException;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
+import rw.dyna.ecommerce.v1.models.Profile;
 import rw.dyna.ecommerce.v1.models.Role;
 import rw.dyna.ecommerce.v1.models.User;
 import rw.dyna.ecommerce.v1.repositories.IUserRepository;
+import rw.dyna.ecommerce.v1.services.IClientService;
 import rw.dyna.ecommerce.v1.services.IRoleService;
 import rw.dyna.ecommerce.v1.services.IUserServices;
 import rw.dyna.ecommerce.v1.utils.Utility;
@@ -36,13 +39,16 @@ public class UserServiceImpl implements IUserServices {
     private final IRoleService  roleService;
     private final MailService mailService;
 
+    private final IClientService clientService;
+
 
     @Autowired
-    public UserServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, IUserRepository userRepository, IRoleService roleService, MailService mailService) {
+    public UserServiceImpl(BCryptPasswordEncoder bCryptPasswordEncoder, IUserRepository userRepository, IRoleService roleService, MailService mailService, @Lazy IClientService clientService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.mailService = mailService;
+        this.clientService = clientService;
     }
 
     public void validateNewRegistration(User user){
@@ -119,6 +125,28 @@ public class UserServiceImpl implements IUserServices {
         }
         return null;
         }
+
+    @Override
+    public Profile getLoggedInProfile() {
+        User theUser = getLoggedInUser();
+        Object profile;
+        Optional<Role> role = theUser.getRoles().stream().findFirst();
+        System.out.println(role.get().getName() + " : name");
+        if (role.isPresent()) {
+            switch (role.get().getName()) {
+                case CLIENT:
+                    profile = clientService.findByUser(theUser);
+                    break;
+                case ADMIN:
+                    profile = theUser;
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + role.get().getName());
+            }
+            return new Profile(profile);
+        }
+        return null;
+    }
 
     @Override
     public User getUserByEmail(String email){
