@@ -25,7 +25,7 @@ import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 @RestController
-//@CrossOrigin
+@CrossOrigin
 @RequestMapping(path = "/api/v1/auth")
 public class AuthController {
     private final IUserServices userService;
