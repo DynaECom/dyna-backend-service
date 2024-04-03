@@ -39,6 +39,8 @@ public class User extends InitiatorAudit {
     @JsonIgnore
     private List<LocationAddress> locationAddressList;
 
+    private String resetPasswordToken;
+
     @Column(name = "password")
     private String password;
 

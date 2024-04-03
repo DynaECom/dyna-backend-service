@@ -62,21 +62,65 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(new JWTAuthenticationResponse(jwt)));
     }
 
+//    @PostMapping("/forgot-password")
+//    public ResponseEntity<ApiResponse> forgot_password(@Valid @RequestBody ForgotPasswordDto dto) {
+//        User user = userService.getUserByEmail(dto.getEmail());
+//        user.setActivationCode(Utility.randomUUID(6,0,'N'));
+//        this.userService.save(user);
+//        mailService.sendResetPassword(user);
+//        return ResponseEntity.ok(new ApiResponse(true, "Password reset email sent successfully"));
+//    }
     @PostMapping("/forgot-password")
-    public ResponseEntity<ApiResponse> forgot_password(@Valid @RequestBody ForgotPasswordDto dto) {
+    public ResponseEntity<ApiResponse> forgotPassword(@Valid @RequestBody ForgotPasswordDto dto) {
         User user = userService.getUserByEmail(dto.getEmail());
-        user.setActivationCode(Utility.randomUUID(6,0,'N'));
-        this.userService.save(user);
+        if (user == null) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "User not found"));
+        }
+
+        // Generate JWT token
+        String token = jwtTokenProvider.generateTokenWithUser(user);
+
+        // Save token to user entity, if necessary
+        user.setResetPasswordToken(token);
+        userService.save(user);
+
+        // Send reset password email with JWT token
         mailService.sendResetPassword(user);
+
         return ResponseEntity.ok(new ApiResponse(true, "Password reset email sent successfully"));
     }
     @PostMapping(path="/reset-password")
     public ResponseEntity<ApiResponse> resetPassword(@RequestBody @Valid ResetPassword dto){
-        User user = this.userService.getUserByEmail(dto.getEmail());
-            user.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
-            user.setActivationCode(Utility.randomUUID(6,0,'N'));
-            this.userService.save(user);
+        String token = dto.getResetToken();
+        String email = dto.getEmail();
+
+        // Validate token
+        if (!jwtTokenProvider.validateToken(token)) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "Invalid or expired reset token"));
+        }
+
+        // Extract email from token
+        String tokenEmail = jwtTokenProvider.getUserEmailFromToken(token);
+
+        // Ensure the token email matches the request email
+        if (!email.equals(tokenEmail)) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "Email address mismatch"));
+        }
+
+        // Retrieve user by email
+        User user = userService.getUserByEmail(email);
+        if (user == null) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "User not found"));
+        }
+
+        // Update password and activation code
+        user.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+        user.setActivationCode(Utility.randomUUID(6, 0, 'N'));
+        userService.save(user);
+
         return ResponseEntity.ok(new ApiResponse(true,"Password successfully reset"));
     }
 
-}
+    }
+
+

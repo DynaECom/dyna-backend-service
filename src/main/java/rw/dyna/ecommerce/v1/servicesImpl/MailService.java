@@ -35,7 +35,7 @@ public class MailService {
     }
 
     @Async
-    public void sendAccountVerificationEmail(User user) throws MessagingException {
+    public void sendAccountVerificationEmail (User user) throws MessagingException {
         String link = clientHost + "/verify-email?email=" + user.getEmail() + "&code=" + user.getActivationCode();
 
         Mail mail = new Mail(
@@ -47,7 +47,7 @@ public class MailService {
 
     @Async
     public void sendResetPassword(User user){
-        String link = clientHost + "/reset-password?email=" + user.getEmail() + "&code=" + user.getActivationCode();
+        String link = clientHost + "/reset-password?email=" + user.getEmail() + "&token=" + user.getResetPasswordToken();
         Mail mail = new Mail(appName, "Verify Your email to complete password reset", user.getFirstName(), user.getEmail(), "verify-email", link);
         sendEmail(mail);
     }

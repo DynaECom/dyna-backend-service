@@ -9,6 +9,9 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class ResetPassword {
     @NotBlank
+    String resetToken;
+
+    @NotBlank
     String email;
 
     @NotBlank
