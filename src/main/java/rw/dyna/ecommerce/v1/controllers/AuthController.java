@@ -76,7 +76,7 @@ public class AuthController {
         }
 
         // Generate JWT token
-        String token = jwtTokenProvider.generateTokenWithUser(user);
+        String token = jwtTokenProvider.createToken(user.getId(), user.getEmail());
 
         // Save token to user entity, if necessary
         user.setResetPasswordToken(token);
