@@ -57,19 +57,10 @@ public class AuthController {
             System.out.println(e.getMessage());
         }
 
-        System.out.println();
 
         return ResponseEntity.ok(ApiResponse.success(new JWTAuthenticationResponse(jwt)));
     }
 
-//    @PostMapping("/forgot-password")
-//    public ResponseEntity<ApiResponse> forgot_password(@Valid @RequestBody ForgotPasswordDto dto) {
-//        User user = userService.getUserByEmail(dto.getEmail());
-//        user.setActivationCode(Utility.randomUUID(6,0,'N'));
-//        this.userService.save(user);
-//        mailService.sendResetPassword(user);
-//        return ResponseEntity.ok(new ApiResponse(true, "Password reset email sent successfully"));
-//    }
     @PostMapping("/forgot-password")
     public ResponseEntity<ApiResponse> forgotPassword(@Valid @RequestBody ForgotPasswordDto dto) {
         User user = userService.getUserByEmail(dto.getEmail());
@@ -98,6 +89,7 @@ public class AuthController {
         if (!jwtTokenProvider.validateToken(token)) {
             return ResponseEntity.badRequest().body(new ApiResponse(false, "Invalid or expired reset token"));
         }
+
 
         // Extract email from token
         String tokenEmail = jwtTokenProvider.getUserEmailFromToken(token);

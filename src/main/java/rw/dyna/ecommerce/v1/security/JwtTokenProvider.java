@@ -12,9 +12,7 @@ import rw.dyna.ecommerce.v1.models.User;
 import rw.dyna.ecommerce.v1.utils.Mapper;
 
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class JwtTokenProvider {
@@ -22,6 +20,11 @@ public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
+
+    private static final String CLAIM_KEY_USER_ID = "userId";
+    private static final String CLAIM_KEY_EMAIL = "email";
+    private static final String CLAIM_KEY_ROLE = "role";
+
 
     @Value("${jwt.expires}")
     private int jwtExpirationInMs;
@@ -50,6 +53,20 @@ public class JwtTokenProvider {
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
+    }
+
+    public String createToken(UUID userId , String email , String role){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH , 1);
+
+        return  Jwts.builder()
+                .claim(CLAIM_KEY_USER_ID , userId)
+                .claim(CLAIM_KEY_EMAIL , email)
+                .claim(CLAIM_KEY_ROLE , role)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(calendar.getTime())
+                .signWith(SignatureAlgorithm.HS256 , jwtSecret).compact();
     }
 
     public String generateTokenWithUser(User user) {
