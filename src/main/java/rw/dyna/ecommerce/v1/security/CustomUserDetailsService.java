@@ -38,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         else if (user.getStatus() == EUserStatus.DEACTIVATED)
             throw new BadRequestException("Your account is deactivated ask the re activation");
         else if (user.getStatus() == EUserStatus.ACTIVE)
-            return UserPrincipal.create(user);
+            return new UserSecurityDetails(user);
         else
             throw new BadRequestException("Invalid user type ");
     }

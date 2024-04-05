@@ -2,6 +2,7 @@ package rw.dyna.ecommerce.v1.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,9 +17,12 @@ import rw.dyna.ecommerce.v1.dtos.ResetPassword;
 import rw.dyna.ecommerce.v1.models.User;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
 import rw.dyna.ecommerce.v1.payloads.JWTAuthenticationResponse;
+import rw.dyna.ecommerce.v1.payloads.LoginResponse;
 import rw.dyna.ecommerce.v1.security.JwtTokenProvider;
+import rw.dyna.ecommerce.v1.services.IAuthenticationService;
 import rw.dyna.ecommerce.v1.services.IUserServices;
 import rw.dyna.ecommerce.v1.servicesImpl.MailService;
+import rw.dyna.ecommerce.v1.utils.ExceptionUtils;
 import rw.dyna.ecommerce.v1.utils.Utility;
 
 import javax.mail.MessagingException;
@@ -34,31 +38,34 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MailService mailService;
+    private final IAuthenticationService authenticationService;
 
     @Autowired
-    public AuthController(IUserServices userService, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService) {
+    public AuthController(IUserServices userService, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, IAuthenticationService authenticationService) {
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.authenticationManager = authenticationManager;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.mailService = mailService;
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping(path = "/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginDto signInDTO) {
-        String jwt = null;
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInDTO.getEmail(),signInDTO.getPassword()));
-        try {
-            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            jwt = jwtTokenProvider.generateToken(authentication);
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-
-        return ResponseEntity.ok(ApiResponse.success(new JWTAuthenticationResponse(jwt)));
+//        try {
+            // Call the login service method
+            LoginResponse loginResponse = authenticationService.login(signInDTO);
+            // Return a successful response
+            return new ResponseEntity<>(new ApiResponse(
+                    true,
+                    "Login successful",
+                    loginResponse
+            ), HttpStatus.OK);
+//        } catch (Exception e) {
+//            // Handle exceptions and return an appropriate response
+//            return ExceptionUtils.handleControllerExceptions(e);
+//        }
     }
 
     @PostMapping("/forgot-password")
