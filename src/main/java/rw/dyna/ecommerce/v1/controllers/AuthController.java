@@ -53,7 +53,7 @@ public class AuthController {
     @PostMapping(path = "/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginDto signInDTO) {
 
-//        try {
+        try {
             // Call the login service method
             LoginResponse loginResponse = authenticationService.login(signInDTO);
             // Return a successful response
@@ -62,10 +62,10 @@ public class AuthController {
                     "Login successful",
                     loginResponse
             ), HttpStatus.OK);
-//        } catch (Exception e) {
-//            // Handle exceptions and return an appropriate response
-//            return ExceptionUtils.handleControllerExceptions(e);
-//        }
+        } catch (Exception e) {
+            // Handle exceptions and return an appropriate response
+            return ExceptionUtils.handleControllerExceptions(e);
+        }
     }
 
     @PostMapping("/forgot-password")

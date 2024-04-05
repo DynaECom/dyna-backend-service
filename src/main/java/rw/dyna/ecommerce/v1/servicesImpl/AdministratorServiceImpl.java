@@ -52,7 +52,7 @@ public class AdministratorServiceImpl implements IAdministratorService {
     }
 
     @Override
-    public Administrator createAdministrator(RegisterAdminDto dto) {
+    public Administrator createAdministrator(RegisterAdminDto dto, File profile) {
         Administrator administrator = Mapper.getAdministratorFromDTO(dto, dto.getPassword());
         userService.validateNewRegistration(administrator);
         if(!Objects.equals(dto.getKey(), adminRegistrationKey)) {
@@ -66,6 +66,7 @@ public class AdministratorServiceImpl implements IAdministratorService {
         administrator.setLastName(dto.getLastName());
         administrator.setFirstName(dto.getFirstName());
         administrator.setPhoneNumber(dto.getPhoneNumber());
+        administrator.setProfile_picture(profile);
         administrator.setPassword(encodePassword);
         administrator.setRoles(Collections.singleton(role));
         return userRepository.save(administrator);

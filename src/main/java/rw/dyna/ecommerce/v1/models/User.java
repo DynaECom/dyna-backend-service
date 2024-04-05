@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
 import rw.dyna.ecommerce.v1.enums.EUserStatus;
+import rw.dyna.ecommerce.v1.fileHandling.File;
 import rw.dyna.ecommerce.v1.utils.Utility;
 
 import javax.persistence.*;
@@ -40,6 +41,9 @@ public class User extends InitiatorAudit {
     private List<LocationAddress> locationAddressList;
 
     private String resetPasswordToken;
+
+    @OneToOne
+    private File profile_picture;
 
     @Column(name = "password")
     private String password;

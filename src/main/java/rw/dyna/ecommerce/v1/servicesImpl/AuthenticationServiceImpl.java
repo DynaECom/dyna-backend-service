@@ -34,7 +34,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Override
     public LoginResponse login(LoginDto loginDto){
-//        try {
+        try {
             User user = userRepository.findByEmail(loginDto.getEmail()).orElseThrow(() -> new BadRequestException("User with provided email not found"));
             if(Hash.isTheSame(loginDto.getPassword() , user.getPassword())){
                 if(user.getStatus().equals(EUserStatus.ACTIVE)){
@@ -57,11 +57,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             }else{
                 throw new BadRequestException("Incorrect Email or Password");
             }
-//        }catch (Exception e){
-//            ExceptionUtils.handleServiceExceptions(e);
-////            e.printStackTrace();
-//            return null;
-//        }
+        }catch (Exception e){
+            ExceptionUtils.handleServiceExceptions(e);
+//            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

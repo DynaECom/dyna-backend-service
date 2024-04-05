@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IAdministratorService {
-    Administrator createAdministrator(RegisterAdminDto dto);
+    Administrator createAdministrator(RegisterAdminDto dto, File profile );
     Administrator getAdministratorById(UUID id);
     Administrator deleteAdministratorById(UUID id);
     List<Administrator> getAllAdministrators();

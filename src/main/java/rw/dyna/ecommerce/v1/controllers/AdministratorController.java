@@ -1,5 +1,6 @@
 package rw.dyna.ecommerce.v1.controllers;
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -9,8 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.dtos.CreateAccountDto;
 import rw.dyna.ecommerce.v1.dtos.RegisterAdminDto;
 import rw.dyna.ecommerce.v1.dtos.UpdateUserDto;
+import rw.dyna.ecommerce.v1.fileHandling.File;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
 import rw.dyna.ecommerce.v1.services.IAdministratorService;
+import rw.dyna.ecommerce.v1.services.IFileService;
+
 import java.util.UUID;
 
 @RestController
@@ -18,13 +22,22 @@ import java.util.UUID;
 public class AdministratorController {
     private final IAdministratorService administratorService;
 
-    public AdministratorController(IAdministratorService administratorService) {
+    private final IFileService fileService;
+
+    @Value("${uploads.directory}")
+    private String directory;
+
+
+    public AdministratorController(IAdministratorService administratorService, IFileService fileService) {
         this.administratorService = administratorService;
+        this.fileService = fileService;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createAdministrator(@RequestBody RegisterAdminDto dto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(administratorService.createAdministrator(dto)));
+    public ResponseEntity<ApiResponse> createAdministrator(@RequestBody RegisterAdminDto dto, @RequestParam("profile-picture") MultipartFile file){
+        File profile = this.fileService.create(file, directory);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(administratorService.createAdministrator(dto, profile)));
     }
     @GetMapping("/")
     public ResponseEntity<ApiResponse> getAllAdministrators(){
