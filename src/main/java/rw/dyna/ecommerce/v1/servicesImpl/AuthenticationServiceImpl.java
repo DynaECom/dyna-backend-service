@@ -45,6 +45,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                     }
                     UserAuthority userAuthority = (UserAuthority) grantedAuthorities.get(0);
                     String role = userAuthority.getAuthority();
+                    System.out.println("Id: " + user.getId() + " Email: " + loginDto.getEmail() + " Role: " + role);
                     String token = jwtTokenProvider.createToken(user.getId(), loginDto.getEmail() , role);
                     return new LoginResponse(token , user , user.getRoles());
                 }else{

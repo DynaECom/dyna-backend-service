@@ -100,7 +100,8 @@ public class AuthController {
 
         // Extract email from token
         String tokenEmail = jwtTokenProvider.getUserEmailFromToken(token);
-
+        System.out.println(tokenEmail);
+        System.out.println("id: " + jwtTokenProvider.getUserIdFromToken(token));
         // Ensure the token email matches the request email
         if (!email.equals(tokenEmail)) {
             return ResponseEntity.badRequest().body(new ApiResponse(false, "Email address mismatch"));
