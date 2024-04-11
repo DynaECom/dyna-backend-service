@@ -5,18 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDto {
-
-    @Email
-    private String email;
-
+public class LogOutDTO {
     @NotBlank
-    private String password;
+    private String token;
 }

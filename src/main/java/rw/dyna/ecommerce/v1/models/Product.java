@@ -7,7 +7,6 @@ import lombok.Setter;
 import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
 import rw.dyna.ecommerce.v1.dtos.CreateProductDto;
 import rw.dyna.ecommerce.v1.enums.EProductStatus;
-import rw.dyna.ecommerce.v1.fileHandling.File;
 
 import javax.persistence.*;
 import java.util.List;

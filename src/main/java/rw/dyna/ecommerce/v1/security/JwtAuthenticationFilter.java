@@ -1,13 +1,20 @@
 package rw.dyna.ecommerce.v1.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import rw.dyna.ecommerce.v1.exceptions.JWTVerificationException;
+import rw.dyna.ecommerce.v1.exceptions.TokenException;
+import rw.dyna.ecommerce.v1.security.jwt.JWTUserInfo;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,23 +34,58 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        try {
-            String jwt = getJwtFromRequest(httpServletRequest);
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                String userID = tokenProvider.getUserIdFromToken(jwt);
-//                System.out.println("id: "+ userID);
-                UserDetails userDetails = customUserDetailsService.loadByUserId(UUID.fromString(userID));
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities());
+        final String authHeader = httpServletRequest.getHeader("Authorization");
+        JWTUserInfo jwtUserInfo = null;
+        String jwtToken = null;
 
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
-        } catch (Exception e) {
-            logger.error("Could not set user authentication in security context", e);
+        if (authHeader == null || !authHeader.startsWith("Bearer")) {
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
+            return;
         }
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+
+        jwtToken = authHeader.substring(7);
+
+        try {
+            jwtUserInfo = tokenProvider.    decodeToken(jwtToken);
+        } catch (JWTVerificationException e) {
+            throwErrors(httpServletRequest , httpServletResponse , filterChain , e);
+        }
+
+        System.out.println("The USER information are  : " + jwtUserInfo);
+
+        assert jwtUserInfo != null;
+        if (jwtUserInfo.getEmail() != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            try {
+                UserSecurityDetails userSecurityDetails = (UserSecurityDetails) customUserDetailsService.loadUserByUsername(jwtUserInfo.getEmail());
+                if (tokenProvider.isTokenValid(jwtToken, userSecurityDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userSecurityDetails, jwtToken, userSecurityDetails.getGrantedAuthorities()
+                    );
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+            } catch (UsernameNotFoundException e) {
+                System.out.println("Exception caught");
+                throwErrors(httpServletRequest , httpServletResponse , filterChain , e);
+                e.printStackTrace();
+            }
+        }
+    }
+    public void throwErrors(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain , Exception e) throws IOException, ServletException {
+        TokenException exception = new TokenException(e.getMessage());
+
+        // status
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+        response.setStatus(httpStatus.value());
+        response.setContentType("application/json");
+
+        // set a new response object as a json one
+        ObjectMapper objectMapper = new ObjectMapper();
+        response.getWriter().write(objectMapper.writeValueAsString("Token is invalid please provide a valid token"));
+        System.out.println(response.getWriter().toString());
+        // exit the filter chain
+        filterChain.doFilter(request, response);
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {

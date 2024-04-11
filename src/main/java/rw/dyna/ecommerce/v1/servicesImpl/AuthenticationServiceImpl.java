@@ -2,6 +2,7 @@ package rw.dyna.ecommerce.v1.servicesImpl;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+import rw.dyna.ecommerce.v1.dtos.LogOutDTO;
 import rw.dyna.ecommerce.v1.dtos.LoginDto;
 import rw.dyna.ecommerce.v1.enums.EUserStatus;
 import rw.dyna.ecommerce.v1.exceptions.BadRequestException;
@@ -45,7 +46,6 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                     }
                     UserAuthority userAuthority = (UserAuthority) grantedAuthorities.get(0);
                     String role = userAuthority.getAuthority();
-                    System.out.println("Id: " + user.getId() + " Email: " + loginDto.getEmail() + " Role: " + role);
                     String token = jwtTokenProvider.createToken(user.getId(), loginDto.getEmail() , role);
                     return new LoginResponse(token , user , user.getRoles());
                 }else{
@@ -73,5 +73,14 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     @Override
     public User resendVerificationCode(String email) {
         return null;
+    }
+
+    @Override
+    public void logout(LogOutDTO dto) {
+        try{
+
+        }catch (Exception e){
+            ExceptionUtils.handleServiceExceptions(e);
+        }
     }
 }

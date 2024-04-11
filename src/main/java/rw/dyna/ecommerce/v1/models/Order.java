@@ -24,8 +24,6 @@ public class Order extends InitiatorAudit {
     private EOrderStatus status;
 
     private String orderCode;
-    
-
 
 
 }

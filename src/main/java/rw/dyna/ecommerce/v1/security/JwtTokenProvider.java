@@ -8,11 +8,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import rw.dyna.ecommerce.v1.exceptions.JWTVerificationException;
 import rw.dyna.ecommerce.v1.models.User;
+import rw.dyna.ecommerce.v1.security.jwt.JWTUserInfo;
 import rw.dyna.ecommerce.v1.utils.Mapper;
 
 
 import java.util.*;
+import java.util.function.Function;
 
 @Component
 public class JwtTokenProvider {
@@ -68,6 +71,37 @@ public class JwtTokenProvider {
                 .setExpiration(calendar.getTime())
                 .signWith(SignatureAlgorithm.HS256 , jwtSecret).compact();
     }
+    public JWTUserInfo decodeToken(String token) throws JWTVerificationException {
+        Claims claims = extractAllClaims(token);
+        String userId = (String) claims.get(CLAIM_KEY_USER_ID);
+        String email = (String) claims.get(CLAIM_KEY_EMAIL);
+        String role = (String) claims.get(CLAIM_KEY_ROLE);
+        return new JWTUserInfo().setEmail(email)
+                .setRole(role)
+                .setUserId(userId);
+    }
+    public Boolean isTokenValid(String token , UserSecurityDetails userSecurityDetails){
+        Claims claims = extractAllClaims(token);
+        String email = (String) claims.get(CLAIM_KEY_EMAIL);
+        final String username = email;
+        return (username.equals(userSecurityDetails.getUsername()) && !isTokenExpired(token));
+    }
+    public Date extractExpiration(String token){
+        return extractClaim(token , Claims::getExpiration);
+    }
+    public <T> T extractClaim(String token , Function<Claims , T> claimsResolver){
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+    public Boolean isTokenExpired(String token){
+        Date expirationDate = extractExpiration(token);
+        Date currentTime  = new Date(System.currentTimeMillis());
+        return !currentTime.before(expirationDate);
+    }
+    public Claims extractAllClaims(String token) {
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+    }
+
     public String createToken(UUID userId , String email){
 
         Calendar calendar = Calendar.getInstance();

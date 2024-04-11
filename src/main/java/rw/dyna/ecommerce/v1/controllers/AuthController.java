@@ -10,10 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import rw.dyna.ecommerce.v1.dtos.CheckValidCode;
-import rw.dyna.ecommerce.v1.dtos.ForgotPasswordDto;
-import rw.dyna.ecommerce.v1.dtos.LoginDto;
-import rw.dyna.ecommerce.v1.dtos.ResetPassword;
+import rw.dyna.ecommerce.v1.dtos.*;
 import rw.dyna.ecommerce.v1.models.User;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
 import rw.dyna.ecommerce.v1.payloads.JWTAuthenticationResponse;
@@ -61,6 +58,21 @@ public class AuthController {
                     true,
                     "Login successful",
                     loginResponse
+            ), HttpStatus.OK);
+        } catch (Exception e) {
+            // Handle exceptions and return an appropriate response
+            return ExceptionUtils.handleControllerExceptions(e);
+        }
+    }
+    @PostMapping(path = "/logout")
+    public ResponseEntity<ApiResponse> logout(@Valid @RequestBody LogOutDTO dto){
+        try {
+            // Call the logout service method
+            authenticationService.logout(dto);
+            // Return a successful response
+            return new ResponseEntity<>(new ApiResponse(
+                    true,
+                    "Logout successful"
             ), HttpStatus.OK);
         } catch (Exception e) {
             // Handle exceptions and return an appropriate response
