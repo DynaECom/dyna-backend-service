@@ -57,6 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (jwtUserInfo.getEmail() != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
                 UserSecurityDetails userSecurityDetails = (UserSecurityDetails) customUserDetailsService.loadUserByUsername(jwtUserInfo.getEmail());
+                System.out.println("security details instance" + customUserDetailsService.loadUserByUsername(jwtUserInfo.getEmail()));
                 if (tokenProvider.isTokenValid(jwtToken, userSecurityDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userSecurityDetails, jwtToken, userSecurityDetails.getGrantedAuthorities()
@@ -66,7 +67,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
             } catch (UsernameNotFoundException e) {
-                System.out.println("Exception caught");
                 throwErrors(httpServletRequest , httpServletResponse , filterChain , e);
                 e.printStackTrace();
             }

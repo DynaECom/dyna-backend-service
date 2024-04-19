@@ -33,14 +33,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String s) throws BadRequestException{
         User user = userRepository.findByEmailOrPhoneNumber(s, s).orElseThrow(() -> new UsernameNotFoundException("user not found with email or mobile of " + s));
+
         if (user.getStatus() == EUserStatus.WAIT_EMAIL_VERIFICATION)
             throw new BadRequestException("You must verify your email to continue with the app, visit your email");
         else if (user.getStatus() == EUserStatus.DEACTIVATED)
             throw new BadRequestException("Your account is deactivated ask the re activation");
-        else if (user.getStatus() == EUserStatus.ACTIVE)
+        else if (user.getStatus() == EUserStatus.ACTIVE) {
+            System.out.println("User"+ user);
             return new UserSecurityDetails(user);
-        else
+        }else
             throw new BadRequestException("Invalid user type");
-
     }
 }
