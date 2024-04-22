@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwtToken = authHeader.substring(7);
 
         try {
-            jwtUserInfo = tokenProvider.    decodeToken(jwtToken);
+            jwtUserInfo = tokenProvider.decodeToken(jwtToken);
         } catch (JWTVerificationException e) {
             throwErrors(httpServletRequest , httpServletResponse , filterChain , e);
         }
