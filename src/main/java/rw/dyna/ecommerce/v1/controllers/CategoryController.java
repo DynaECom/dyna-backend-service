@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rw.dyna.ecommerce.v1.dtos.CreateCategoryDto;
 import rw.dyna.ecommerce.v1.dtos.CreateSubCategoryDto;
+import rw.dyna.ecommerce.v1.dtos.UpdateCategoryDTO;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
 import rw.dyna.ecommerce.v1.services.ICategoryService;
 
@@ -39,7 +40,7 @@ public class CategoryController {
     }
 
     @PutMapping(path= "/update")
-    public ResponseEntity<ApiResponse> updateCategory(@Valid @RequestBody CreateCategoryDto dto, @RequestParam UUID id){
+    public ResponseEntity<ApiResponse> updateCategory(@Valid @RequestBody UpdateCategoryDTO dto, @RequestParam UUID id){
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(categoryService.updateCategory(id, dto)));
     }
 

@@ -2,11 +2,9 @@ package rw.dyna.ecommerce.v1.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-
 import java.nio.charset.StandardCharsets;
 
 @Configuration
@@ -18,7 +16,6 @@ public class ThymeleafConfigurer {
         templateEngine.addTemplateResolver(htmlTemplateResolver());
         return templateEngine;
     }
-
 
     @Bean
     public ClassLoaderTemplateResolver htmlTemplateResolver(){

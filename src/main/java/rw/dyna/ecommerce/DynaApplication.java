@@ -43,7 +43,6 @@ public class DynaApplication {
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(DynaApplication.class, args);
-
 	}
 
 }

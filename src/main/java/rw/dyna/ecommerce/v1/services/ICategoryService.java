@@ -3,6 +3,7 @@ package rw.dyna.ecommerce.v1.services;
 import org.springframework.stereotype.Service;
 import rw.dyna.ecommerce.v1.dtos.CreateCategoryDto;
 import rw.dyna.ecommerce.v1.dtos.CreateSubCategoryDto;
+import rw.dyna.ecommerce.v1.dtos.UpdateCategoryDTO;
 import rw.dyna.ecommerce.v1.models.Category;
 import rw.dyna.ecommerce.v1.models.SubCategory;
 
@@ -15,7 +16,7 @@ public interface ICategoryService {
 
     Category removeCategory(UUID id);
 
-    Category updateCategory(UUID id, CreateCategoryDto category);
+    Category updateCategory(UUID id, UpdateCategoryDTO category);
 
     List<Category> getCategories();
 

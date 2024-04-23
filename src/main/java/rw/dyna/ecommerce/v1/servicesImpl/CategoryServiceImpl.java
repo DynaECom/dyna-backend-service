@@ -3,6 +3,8 @@ package rw.dyna.ecommerce.v1.servicesImpl;
 import org.springframework.stereotype.Service;
 import rw.dyna.ecommerce.v1.dtos.CreateCategoryDto;
 import rw.dyna.ecommerce.v1.dtos.CreateSubCategoryDto;
+import rw.dyna.ecommerce.v1.dtos.UpdateCategoryDTO;
+import rw.dyna.ecommerce.v1.dtos.UpdateSubCategoryDTO;
 import rw.dyna.ecommerce.v1.exceptions.BadRequestException;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
 import rw.dyna.ecommerce.v1.models.Category;
@@ -11,10 +13,7 @@ import rw.dyna.ecommerce.v1.repositories.ICategoriesRepository;
 import rw.dyna.ecommerce.v1.repositories.ISubCategoriesRepository;
 import rw.dyna.ecommerce.v1.services.ICategoryService;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class CategoryServiceImpl implements ICategoryService {
@@ -56,10 +55,24 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public Category updateCategory(UUID id, CreateCategoryDto category) {
+    public Category updateCategory(UUID id, UpdateCategoryDTO category) {
         Category category1 = categoryRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("category", "name", category.getName()));
         category1.setName(category.getName());
         category1.setDescription(category.getDescription());
+        List<UpdateSubCategoryDTO>  subCategoryDTOList = category.getUpdateSubCategoryDTOList();
+        for(UpdateSubCategoryDTO dto : subCategoryDTOList){
+            Optional<SubCategory> subCategoryOptional = subCategoriesRepository.findById(dto.getId());
+            SubCategory subCategory = null;
+            if(subCategoryOptional.isPresent()){
+                subCategory = subCategoryOptional.get();
+            }else{
+                subCategory = new SubCategory();
+            }
+            subCategory.setName(dto.getName());
+            subCategory.setCategory(category1);
+            subCategory.setDescription(dto.getDescription());
+            subCategoriesRepository.save(subCategory);
+        }
         categoryRepository.save(category1);
         return category1;
     }
