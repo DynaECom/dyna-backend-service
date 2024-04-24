@@ -17,7 +17,6 @@ import java.util.*;
 
 @Service
 public class CategoryServiceImpl implements ICategoryService {
-
     private final ICategoriesRepository categoryRepository;
     private final ISubCategoriesRepository subCategoriesRepository;
 

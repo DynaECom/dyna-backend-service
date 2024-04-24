@@ -86,8 +86,6 @@ public class JwtTokenProvider {
         Claims claims = extractAllClaims(token);
         String email = (String) claims.get(CLAIM_KEY_EMAIL);
         final String username = email;
-        System.out.println("In token: " + email );
-        System.out.println("In user details: " +  userSecurityDetails.getUsername());
 //        System.out.println("Username : "+ username.equals(userSecurityDetails.getUsername()) );
 //        System.out.println("Expiration: " + !isTokenExpired(token));
         return (username.equals(userSecurityDetails.getUsername()) && !isTokenExpired(token));
