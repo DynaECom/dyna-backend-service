@@ -8,6 +8,7 @@ import rw.dyna.ecommerce.v1.dtos.CreateIllustrationDto;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
 import rw.dyna.ecommerce.v1.services.IIllustrationService;
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.UUID;
 
 @RestController
@@ -24,6 +25,10 @@ public class IllustrationController {
     @PostMapping(value="/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity createIllustration(@Valid @RequestParam("description") String description, @RequestParam("name") String name, @RequestParam("file") MultipartFile file, @RequestParam("id") UUID id){
         CreateIllustrationDto dto = new CreateIllustrationDto(description, name);
+//        Arrays.asList(files).stream().forEach(file -> {
+//            storageService.save(file);
+//            fileNames.add(file.getOriginalFilename());
+//        });
         return ResponseEntity.ok().body(ApiResponse.success(illustrationService.createIllustration(dto, file, id)));
     }
 

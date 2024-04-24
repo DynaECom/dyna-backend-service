@@ -45,10 +45,11 @@ public class ManufacturerServiceImpl implements IManufacturerService {
 
 
     @Override
-    public Manufacturer updateManufacturer(UUID id, CreateManufacturerDto dto) {
+    public Manufacturer updateManufacturer(UUID id, CreateManufacturerDto dto) throws Exception {
         Manufacturer manufacturer = manufacturerRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Manufacturer"));
         manufacturer.setName(dto.getName());
         manufacturer.setDescription(dto.getDescription());
+        manufacturer.setLogoUrl(cloudinaryService.uploadImage(dto.getFile(), "manufacturer_logos"));
         manufacturerRepository.save(manufacturer);
         return manufacturer;
     }

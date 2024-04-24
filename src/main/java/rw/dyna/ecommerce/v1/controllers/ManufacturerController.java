@@ -20,18 +20,20 @@ public class ManufacturerController {
         this.manufacturerService = manufacturerService;
     }
 
-    @PostMapping("create")
-    public ResponseEntity<ApiResponse> createManufacturer(@Valid @RequestParam("description") String description, @RequestParam("name") String name, @RequestParam("file") MultipartFile file) throws Exception {
+    @PostMapping("/create")
+    public ResponseEntity<ApiResponse> createManufacturer(@Valid @RequestPart("description") String description, @RequestPart("name") String name, @RequestPart("file") MultipartFile file) throws Exception {
         CreateManufacturerDto createManufacturerDto =  new CreateManufacturerDto(file, description, name);
         return ResponseEntity.ok().body(ApiResponse.success(manufacturerService.createManufacturer(createManufacturerDto), "Added manufacturer successfully!"));
     }
-    @PutMapping("update")
-    public ResponseEntity<ApiResponse> updateManufacturer(@Valid @RequestBody CreateManufacturerDto dto, @RequestParam("id") UUID id){
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ApiResponse> updateManufacturer(@Valid @RequestPart("description") String description, @RequestPart("name") String name, @RequestPart("file") MultipartFile file, @RequestParam("id") UUID id) throws Exception {
+        CreateManufacturerDto dto = new CreateManufacturerDto(file, description, name);
         return ResponseEntity.ok().body(ApiResponse.success(manufacturerService.updateManufacturer(id, dto)));
     }
 
-    @DeleteMapping("update")
-    public ResponseEntity<ApiResponse> deleteManufacturer(@RequestParam("id") UUID id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ApiResponse> deleteManufacturer(@PathVariable("id") UUID id){
         return ResponseEntity.ok().body(ApiResponse.success(manufacturerService.removeManufacturer(id)));
     }
 
