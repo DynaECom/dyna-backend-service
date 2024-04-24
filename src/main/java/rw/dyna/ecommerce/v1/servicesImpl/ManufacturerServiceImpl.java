@@ -9,6 +9,7 @@ import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
 import rw.dyna.ecommerce.v1.fileHandling.File;
 import rw.dyna.ecommerce.v1.models.Manufacturer;
 import rw.dyna.ecommerce.v1.repositories.ManufacturerRepository;
+import rw.dyna.ecommerce.v1.services.ICloudinaryService;
 import rw.dyna.ecommerce.v1.services.IFileService;
 import rw.dyna.ecommerce.v1.services.IManufacturerService;
 
@@ -24,18 +25,20 @@ public class ManufacturerServiceImpl implements IManufacturerService {
     @Value("${uploads.directory.manufacturer_logos}")
     private String directory;
 
-    public ManufacturerServiceImpl(ManufacturerRepository manufacturerRepository, IFileService fileService) {
+    private final ICloudinaryService cloudinaryService;
+
+    public ManufacturerServiceImpl(ManufacturerRepository manufacturerRepository, IFileService fileService, ICloudinaryService cloudinaryService) {
         this.manufacturerRepository = manufacturerRepository;
         this.fileService = fileService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @Override
-    public Manufacturer createManufacturer(CreateManufacturerDto dto, MultipartFile file) {
-        Manufacturer manufacturer = manufacturerRepository.save(new Manufacturer(dto.getName(), dto.getDescription()));
-        File newFile = null;
-        newFile =  fileService.create(file, directory);
-        manufacturer.setLogo(newFile);
-        manufacturerRepository.save(manufacturer);
+    public Manufacturer createManufacturer(CreateManufacturerDto dto) throws Exception {
+        Manufacturer manufacturer = manufacturerRepository.save(new Manufacturer(dto.getName(), dto.getDescription(),cloudinaryService.uploadImage(dto.getFile(), "manufacturer_logos")));
+//        File newFile = null;
+//        newFile =  fileService.create(dto.getFile(), directory);
+//        manufacturer.setLogo(newFile);
         return manufacturer;
     }
 

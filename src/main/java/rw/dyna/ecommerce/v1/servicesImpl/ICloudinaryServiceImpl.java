@@ -4,7 +4,6 @@ import com.cloudinary.Cloudinary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.services.ICloudinaryService;
-
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.HashMap;

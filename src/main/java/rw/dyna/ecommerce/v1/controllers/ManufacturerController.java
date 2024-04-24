@@ -21,9 +21,9 @@ public class ManufacturerController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<ApiResponse> createManufacturer(@Valid @RequestParam("description") String description, @RequestParam("name") String name, @RequestParam("file") MultipartFile file){
-        CreateManufacturerDto createManufacturerDto =  new CreateManufacturerDto(description, name);
-        return ResponseEntity.ok().body(ApiResponse.success(manufacturerService.createManufacturer(createManufacturerDto, file), "Added manufacturer successfully!"));
+    public ResponseEntity<ApiResponse> createManufacturer(@Valid @RequestParam("description") String description, @RequestParam("name") String name, @RequestParam("file") MultipartFile file) throws Exception {
+        CreateManufacturerDto createManufacturerDto =  new CreateManufacturerDto(file, description, name);
+        return ResponseEntity.ok().body(ApiResponse.success(manufacturerService.createManufacturer(createManufacturerDto), "Added manufacturer successfully!"));
     }
     @PutMapping("update")
     public ResponseEntity<ApiResponse> updateManufacturer(@Valid @RequestBody CreateManufacturerDto dto, @RequestParam("id") UUID id){

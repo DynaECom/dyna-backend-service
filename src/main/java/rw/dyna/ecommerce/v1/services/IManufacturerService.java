@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface IManufacturerService {
 
-    Manufacturer createManufacturer(CreateManufacturerDto dto, MultipartFile file);
+    Manufacturer createManufacturer(CreateManufacturerDto dto) throws Exception;
     Manufacturer updateManufacturer(UUID id, CreateManufacturerDto dto);
 
     String removeManufacturer(UUID id);

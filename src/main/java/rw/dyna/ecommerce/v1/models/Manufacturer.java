@@ -29,8 +29,11 @@ public class Manufacturer extends InitiatorAudit {
     private UUID id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="file_id")
+    @JoinColumn(name="file_id", nullable = true)
     private File logo;
+
+    @Column(name = "logo_url")
+    private String logoUrl;
 
     private EManufacturerStatus status =  EManufacturerStatus.ACTIVE;
 
@@ -38,8 +41,9 @@ public class Manufacturer extends InitiatorAudit {
     @JsonIgnore
     private List<Product> products;
 
-    public Manufacturer(String name, String description) {
+    public Manufacturer(String name, String description, String logoUrl) {
         this.name=name;
         this.description = description;
+        this.logoUrl = logoUrl;
     }
 }
