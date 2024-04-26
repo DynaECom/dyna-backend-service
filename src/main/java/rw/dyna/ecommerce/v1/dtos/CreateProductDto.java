@@ -1,23 +1,16 @@
 package rw.dyna.ecommerce.v1.dtos;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import rw.dyna.ecommerce.v1.enums.EProductStatus;
-import rw.dyna.ecommerce.v1.models.Manufacturer;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-@Getter
-@Setter
+
 @NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class CreateProductDto {
 
     @NotBlank
     private String name;
-
 
     private String Company;
 
@@ -39,7 +32,7 @@ public class CreateProductDto {
 
     private UUID category;
 
-    private UUID subCategory;
+    private UUID sub_category;
 
     private UUID manufacturer;
 

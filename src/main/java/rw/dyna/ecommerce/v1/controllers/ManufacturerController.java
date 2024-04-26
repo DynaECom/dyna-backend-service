@@ -20,14 +20,14 @@ public class ManufacturerController {
         this.manufacturerService = manufacturerService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create/{productId}")
     public ResponseEntity<ApiResponse> createManufacturer(@Valid @RequestPart("description") String description, @RequestPart("name") String name, @RequestPart("file") MultipartFile file) throws Exception {
         CreateManufacturerDto createManufacturerDto =  new CreateManufacturerDto(file, description, name);
         return ResponseEntity.ok().body(ApiResponse.success(manufacturerService.createManufacturer(createManufacturerDto), "Added manufacturer successfully!"));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse> updateManufacturer(@Valid @RequestPart("description") String description, @RequestPart("name") String name, @RequestPart("file") MultipartFile file, @RequestParam("id") UUID id) throws Exception {
+    public ResponseEntity<ApiResponse> updateManufacturer(@Valid @RequestPart("description") String description, @RequestPart("name") String name, @RequestPart("file") MultipartFile file, @PathVariable("id") UUID id) throws Exception {
         CreateManufacturerDto dto = new CreateManufacturerDto(file, description, name);
         return ResponseEntity.ok().body(ApiResponse.success(manufacturerService.updateManufacturer(id, dto)));
     }

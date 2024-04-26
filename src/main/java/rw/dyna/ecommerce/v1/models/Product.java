@@ -1,5 +1,6 @@
 package rw.dyna.ecommerce.v1.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +43,7 @@ public class Product extends InitiatorAudit {
 
     private Integer inStock;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
     private List<Illustration> illustrations;
 
     @ManyToOne
@@ -53,7 +54,8 @@ public class Product extends InitiatorAudit {
     @JoinColumn(name = "manufacturer")
     private Manufacturer manufacturer;
 
-    @OneToMany(mappedBy = "product", fetch =  FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch =  FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Review> review;
 
     public Product(CreateProductDto dto, Manufacturer manufacturer, SubCategory subCategory) {

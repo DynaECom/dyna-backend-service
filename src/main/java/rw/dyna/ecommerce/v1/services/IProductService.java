@@ -1,4 +1,5 @@
 package rw.dyna.ecommerce.v1.services;
+import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.dtos.CreateProductDto;
 import rw.dyna.ecommerce.v1.models.Product;
 
@@ -7,6 +8,8 @@ import java.util.UUID;
 
 public interface IProductService {
     Product createProduct(CreateProductDto dto);
+
+    Product addIllustrations(MultipartFile[] files, UUID id);
 
     String removeProduct(UUID id);
 

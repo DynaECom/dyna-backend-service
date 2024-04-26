@@ -1,6 +1,8 @@
 package rw.dyna.ecommerce.v1.controllers;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.dtos.CreateProductDto;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
 import rw.dyna.ecommerce.v1.services.IProductService;
@@ -26,6 +28,11 @@ public class ProductController {
     public ResponseEntity<ApiResponse> deleteProduct(@RequestParam UUID id){
         return ResponseEntity.ok().body(ApiResponse.success(productService.removeProduct(id)));
     }
+    @PostMapping(value="/illustration/{productId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity createIllustration(@RequestPart("files") MultipartFile[] files, @PathVariable("productId") UUID id){
+        return ResponseEntity.ok().body(ApiResponse.success(productService.addIllustrations(files, id)));
+    }
+
 
     @PutMapping("/update")
     public ResponseEntity<ApiResponse> updateProduct(@RequestParam UUID id, @Valid @RequestBody CreateProductDto dto){
@@ -35,5 +42,10 @@ public class ProductController {
     @GetMapping("/get")
     public ResponseEntity<ApiResponse> getProduct(@RequestParam UUID id){
         return ResponseEntity.ok().body(ApiResponse.success(productService.getProductById(id)));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse> getAllProducts(){
+        return ResponseEntity.ok().body(ApiResponse.success(productService.getAllProducts()));
     }
 }

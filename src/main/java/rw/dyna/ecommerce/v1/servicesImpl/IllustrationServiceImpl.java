@@ -10,10 +10,14 @@ import rw.dyna.ecommerce.v1.models.Illustration;
 import rw.dyna.ecommerce.v1.models.Product;
 import rw.dyna.ecommerce.v1.repositories.IIllustrationRepository;
 import rw.dyna.ecommerce.v1.repositories.IProductRepository;
+import rw.dyna.ecommerce.v1.services.ICloudinaryService;
 import rw.dyna.ecommerce.v1.services.IFileService;
 import rw.dyna.ecommerce.v1.services.IIllustrationService;
 import rw.dyna.ecommerce.v1.services.IProductService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,28 +31,18 @@ public class IllustrationServiceImpl implements IIllustrationService {
     private final IProductService productService;
 
     private final IProductRepository productRepository;
+    private final ICloudinaryService cloudinaryService;
 
     @Value("${uploads.directory.illustrations}")
     private String directory;
 
-    public IllustrationServiceImpl(IFileService fileService, IIllustrationRepository illustrationRepository, IProductService productService, IProductRepository productRepository) {
+    public IllustrationServiceImpl(IFileService fileService, IIllustrationRepository illustrationRepository, IProductService productService, IProductRepository productRepository, ICloudinaryService cloudinaryService) {
         this.fileService = fileService;
 
         this.illustrationRepository = illustrationRepository;
         this.productService = productService;
         this.productRepository = productRepository;
-    }
-
-    @Override
-    public Illustration createIllustration(CreateIllustrationDto dto, MultipartFile file, UUID id) {
-        File newFile = null;
-        Illustration illustration = illustrationRepository.save(new Illustration(dto.getColor(), dto.getDescription()));
-        newFile = fileService.create(file, directory);
-        illustration.setFile(newFile);
-        Product product = productService.getProductById(id);
-        product.getIllustrations().add(illustration);
-        productRepository.save(product);
-        return illustrationRepository.save(illustration);
+        this.cloudinaryService = cloudinaryService;
     }
 
 

@@ -1,16 +1,23 @@
 package rw.dyna.ecommerce.v1.servicesImpl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import rw.dyna.ecommerce.v1.dtos.CreateIllustrationDto;
 import rw.dyna.ecommerce.v1.dtos.CreateProductDto;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
+import rw.dyna.ecommerce.v1.models.Illustration;
 import rw.dyna.ecommerce.v1.models.Manufacturer;
 import rw.dyna.ecommerce.v1.models.Product;
 import rw.dyna.ecommerce.v1.models.SubCategory;
+import rw.dyna.ecommerce.v1.repositories.IIllustrationRepository;
 import rw.dyna.ecommerce.v1.repositories.IProductRepository;
 import rw.dyna.ecommerce.v1.repositories.ISubCategoriesRepository;
+import rw.dyna.ecommerce.v1.services.ICloudinaryService;
 import rw.dyna.ecommerce.v1.services.IManufacturerService;
 import rw.dyna.ecommerce.v1.services.IProductService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,21 +26,55 @@ public class ProductServiceImpl implements IProductService {
 
     private final IManufacturerService manufacturerService;
     private final ISubCategoriesRepository subCategoriesRepository;
+    private final IIllustrationRepository illustrationRepository;
+    private final ICloudinaryService cloudinaryService;
     private final IProductRepository productRepository;
-    public ProductServiceImpl(IManufacturerService manufacturerService, ISubCategoriesRepository subCategoriesRepository, IProductRepository productRepository) {
+    public ProductServiceImpl(IManufacturerService manufacturerService, ISubCategoriesRepository subCategoriesRepository, IIllustrationRepository illustrationRepository, ICloudinaryService cloudinaryService, IProductRepository productRepository) {
 
         this.manufacturerService = manufacturerService;
         this.subCategoriesRepository = subCategoriesRepository;
+        this.illustrationRepository = illustrationRepository;
+        this.cloudinaryService = cloudinaryService;
         this.productRepository = productRepository;
     }
 
     @Override
     public Product createProduct(CreateProductDto dto) {
         Manufacturer manufacturer = manufacturerService.findManufacturerById(dto.getManufacturer());
-        SubCategory subCategory = subCategoriesRepository.findById(dto.getSubCategory()).orElseThrow(()->new ResourceNotFoundException("Sub category"));
+        System.out.println("category: " + dto.getCategory());
+        System.out.println("sub-category: " + dto.getSub_category());
+        SubCategory subCategory = subCategoriesRepository.findById(dto.getSub_category()).orElseThrow(()->new ResourceNotFoundException("Sub category"));
         Product product = new Product(dto, manufacturer, subCategory);
         productRepository.save(product);
         return product;
+    }
+
+    @Override
+    public Product addIllustrations(MultipartFile[] files, UUID id){
+        List<Illustration> illustrations = new ArrayList<>();
+
+        Arrays.asList(files).stream().forEach(file -> {
+            try {
+                CreateIllustrationDto dto = null;
+                if(file.getOriginalFilename().split("-").length > 1) {
+                    String[] data = file.getOriginalFilename().split("-");
+                    dto = new CreateIllustrationDto(data[0], data[1]);
+                }else{
+                    String[] data = file.getOriginalFilename().split("-");
+                    dto = new CreateIllustrationDto(data[0]);
+                }
+                Illustration illustration = new Illustration(dto.getColor(), dto.getDescription());
+
+                illustrations.add(illustrationRepository.save(illustration));
+                cloudinaryService.uploadImage(file, "illustrations");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        Product product = this.getProductById(id);
+        product.setIllustrations(illustrations);
+        return productRepository.save(product);
     }
 
     @Override
@@ -45,7 +86,7 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public Product updateProduct(UUID id, CreateProductDto dto) {
         Product product =  this.findProductById(id);
-        SubCategory category = subCategoriesRepository.findById(dto.getSubCategory()).orElseThrow(()-> new ResourceNotFoundException("subCategory"));
+        SubCategory category = subCategoriesRepository.findById(dto.getSub_category()).orElseThrow(()-> new ResourceNotFoundException("subCategory"));
         Manufacturer manufacturer = manufacturerService.findManufacturerById(dto.getManufacturer());
         Product newProduct = new Product(dto, manufacturer, category);
         product.setBrand(newProduct.getBrand());

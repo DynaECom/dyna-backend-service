@@ -27,6 +27,9 @@ public class Illustration extends InitiatorAudit {
     @JoinColumn(name="file_id")
     private File file;
 
+    @Column
+    private String imageUrl;
+
     @ManyToOne
     @JoinColumn(name = "illustration_id")
     private Product product;
