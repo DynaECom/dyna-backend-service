@@ -43,7 +43,7 @@ public class ProductServiceImpl implements IProductService {
         System.out.println("category: " + dto.getCategory());
         System.out.println("sub-category: " + dto.getSub_category());
 
-        List<SubCategory> subCategories = null;
+        List<SubCategory> subCategories = new ArrayList<>();
 
         for(UUID id: dto.getSub_category()){
             SubCategory subCategory = subCategoriesRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Sub category"));
@@ -102,7 +102,7 @@ public class ProductServiceImpl implements IProductService {
         Product newProduct = new Product(dto, manufacturer, subCategories);
         product.setBrand(newProduct.getBrand());
         product.setManufacturer(newProduct.getManufacturer());
-        product.setCategory(newProduct.getCategory());
+        product.setSubCategoriesList(newProduct.getSubCategoriesList());
         product.setPrice(newProduct.getPrice());
         product.setCompany(newProduct.getCompany());
         product.setName(newProduct.getName());
@@ -110,7 +110,7 @@ public class ProductServiceImpl implements IProductService {
         product.setDiscount(newProduct.getDiscount());
         product.setInStock(newProduct.getInStock());
         product.setWarranty(newProduct.getWarranty());
-        product.setCategory(newProduct.getCategory());
+        product.setSubCategoriesList(newProduct.getSubCategoriesList());
         return productRepository.save(product);
     }
 

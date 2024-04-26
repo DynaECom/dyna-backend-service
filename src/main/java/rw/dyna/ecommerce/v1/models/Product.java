@@ -47,7 +47,9 @@ public class Product extends InitiatorAudit {
     private List<Illustration> illustrations;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<SubCategory> category;
+    @JoinTable(name = "products_subCategories", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "subCategory_id"))
+    @JsonIgnore
+    private List<SubCategory> subCategoriesList;
 
     @ManyToOne
     @JoinColumn(name = "manufacturer")
@@ -57,7 +59,7 @@ public class Product extends InitiatorAudit {
     @JsonIgnore
     private List<Review> review;
 
-    public Product(CreateProductDto dto, Manufacturer manufacturer, List<SubCategory> subCategory) {
+    public Product(CreateProductDto dto, Manufacturer manufacturer, List<SubCategory> subCategories) {
         this.name = dto.getName();
         this.company = dto.getCompany();
         this.brand = dto.getBrand();
@@ -67,7 +69,7 @@ public class Product extends InitiatorAudit {
         this.discount = dto.getDiscount();
         this.status =  dto.getStatus();
         this.inStock = dto.getInstock();
-        this.category = subCategory;
+        this.subCategoriesList = subCategories;
         this.manufacturer = manufacturer;
     }
 }
