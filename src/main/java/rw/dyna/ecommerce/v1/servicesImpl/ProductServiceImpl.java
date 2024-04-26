@@ -40,8 +40,6 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public Product createProduct(CreateProductDto dto) {
         Manufacturer manufacturer = manufacturerService.findManufacturerById(dto.getManufacturer());
-        System.out.println("category: " + dto.getCategory());
-        System.out.println("sub-category: " + dto.getSub_category());
 
         List<SubCategory> subCategories = new ArrayList<>();
 

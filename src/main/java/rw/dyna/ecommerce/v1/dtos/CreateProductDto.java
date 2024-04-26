@@ -31,8 +31,6 @@ public class CreateProductDto {
 
     private Integer instock;
 
-    private UUID category;
-
     private List<UUID> sub_category;
 
     private UUID manufacturer;
