@@ -46,9 +46,8 @@ public class Product extends InitiatorAudit {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
     private List<Illustration> illustrations;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private SubCategory category;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<SubCategory> category;
 
     @ManyToOne
     @JoinColumn(name = "manufacturer")
@@ -58,7 +57,7 @@ public class Product extends InitiatorAudit {
     @JsonIgnore
     private List<Review> review;
 
-    public Product(CreateProductDto dto, Manufacturer manufacturer, SubCategory subCategory) {
+    public Product(CreateProductDto dto, Manufacturer manufacturer, List<SubCategory> subCategory) {
         this.name = dto.getName();
         this.company = dto.getCompany();
         this.brand = dto.getBrand();

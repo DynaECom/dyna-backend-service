@@ -30,7 +30,6 @@ public class ProductServiceImpl implements IProductService {
     private final ICloudinaryService cloudinaryService;
     private final IProductRepository productRepository;
     public ProductServiceImpl(IManufacturerService manufacturerService, ISubCategoriesRepository subCategoriesRepository, IIllustrationRepository illustrationRepository, ICloudinaryService cloudinaryService, IProductRepository productRepository) {
-
         this.manufacturerService = manufacturerService;
         this.subCategoriesRepository = subCategoriesRepository;
         this.illustrationRepository = illustrationRepository;
@@ -43,8 +42,14 @@ public class ProductServiceImpl implements IProductService {
         Manufacturer manufacturer = manufacturerService.findManufacturerById(dto.getManufacturer());
         System.out.println("category: " + dto.getCategory());
         System.out.println("sub-category: " + dto.getSub_category());
-        SubCategory subCategory = subCategoriesRepository.findById(dto.getSub_category()).orElseThrow(()->new ResourceNotFoundException("Sub category"));
-        Product product = new Product(dto, manufacturer, subCategory);
+
+        List<SubCategory> subCategories = null;
+
+        for(UUID id: dto.getSub_category()){
+            SubCategory subCategory = subCategoriesRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Sub category"));
+            subCategories.add(subCategory);
+        }
+        Product product = new Product(dto, manufacturer, subCategories);
         productRepository.save(product);
         return product;
     }
@@ -86,9 +91,15 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public Product updateProduct(UUID id, CreateProductDto dto) {
         Product product =  this.findProductById(id);
-        SubCategory category = subCategoriesRepository.findById(dto.getSub_category()).orElseThrow(()-> new ResourceNotFoundException("subCategory"));
+        List<SubCategory> subCategories = new ArrayList<>();
+
+        for(UUID subCategoryId : dto.getSub_category()){
+            SubCategory subCategory = subCategoriesRepository.findById(subCategoryId).orElseThrow(()->new ResourceNotFoundException("Sub category"));
+            subCategories.add(subCategory);
+        }
+
         Manufacturer manufacturer = manufacturerService.findManufacturerById(dto.getManufacturer());
-        Product newProduct = new Product(dto, manufacturer, category);
+        Product newProduct = new Product(dto, manufacturer, subCategories);
         product.setBrand(newProduct.getBrand());
         product.setManufacturer(newProduct.getManufacturer());
         product.setCategory(newProduct.getCategory());

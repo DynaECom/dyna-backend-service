@@ -2,6 +2,7 @@ package rw.dyna.ecommerce.v1.dtos;
 import lombok.*;
 import rw.dyna.ecommerce.v1.enums.EProductStatus;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -32,7 +33,7 @@ public class CreateProductDto {
 
     private UUID category;
 
-    private UUID sub_category;
+    private List<UUID> sub_category;
 
     private UUID manufacturer;
 
