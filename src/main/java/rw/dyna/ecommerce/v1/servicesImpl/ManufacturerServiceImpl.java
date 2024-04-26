@@ -2,11 +2,8 @@ package rw.dyna.ecommerce.v1.servicesImpl;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.dtos.CreateManufacturerDto;
-import rw.dyna.ecommerce.v1.enums.EManufacturerStatus;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
-import rw.dyna.ecommerce.v1.fileHandling.File;
 import rw.dyna.ecommerce.v1.models.Manufacturer;
 import rw.dyna.ecommerce.v1.repositories.ManufacturerRepository;
 import rw.dyna.ecommerce.v1.services.ICloudinaryService;
@@ -35,13 +32,15 @@ public class ManufacturerServiceImpl implements IManufacturerService {
 
     @Override
     public Manufacturer createManufacturer(CreateManufacturerDto dto) throws Exception {
+        if(manufacturerRepository.findByName(dto.getName()) != null) throw new Exception("Manufacturer already exists");
         Manufacturer manufacturer = manufacturerRepository.save(new Manufacturer(dto.getName(), dto.getDescription(),cloudinaryService.uploadImage(dto.getFile(), "manufacturer_logos")));
-//        File newFile = null;
-//        newFile =  fileService.create(dto.getFile(), directory);
-//        manufacturer.setLogo(newFile);
         return manufacturer;
     }
 
+    @Override
+    public Manufacturer getManufacturerByName(String name){
+        return manufacturerRepository.findByName(name);
+    }
 
 
     @Override

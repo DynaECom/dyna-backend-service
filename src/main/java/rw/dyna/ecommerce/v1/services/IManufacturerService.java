@@ -11,6 +11,9 @@ import java.util.UUID;
 public interface IManufacturerService {
 
     Manufacturer createManufacturer(CreateManufacturerDto dto) throws Exception;
+
+    Manufacturer getManufacturerByName(String name);
+
     Manufacturer updateManufacturer(UUID id, CreateManufacturerDto dto) throws Exception;
 
     String removeManufacturer(UUID id);
