@@ -11,6 +11,7 @@ import rw.dyna.ecommerce.v1.enums.EProductStatus;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -57,7 +58,7 @@ public class Product extends InitiatorAudit {
 
     @OneToMany(mappedBy = "product", fetch =  FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Review> review;
+    private Set<Review> review;
 
     public Product(CreateProductDto dto, Manufacturer manufacturer, List<SubCategory> subCategories) {
         this.name = dto.getName();
