@@ -1,4 +1,5 @@
 package rw.dyna.ecommerce.v1.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,6 +33,7 @@ public class Illustration extends InitiatorAudit {
 
     @ManyToOne
     @JoinColumn(name = "illustration_id")
+    @JsonIgnore
     private Product product;
 
     public Illustration(String color, String description) {
