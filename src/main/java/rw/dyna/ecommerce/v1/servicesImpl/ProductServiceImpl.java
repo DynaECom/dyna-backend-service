@@ -58,7 +58,7 @@ public class ProductServiceImpl implements IProductService {
 
         Arrays.asList(files).stream().forEach(file -> {
             try {
-                CreateIllustrationDto dto = null;
+                CreateIllustrationDto dto;
                 if(file.getOriginalFilename().split("-").length > 1) {
                     String[] data = file.getOriginalFilename().split("-");
                     dto = new CreateIllustrationDto(data[0], data[1]);
@@ -67,7 +67,7 @@ public class ProductServiceImpl implements IProductService {
                     dto = new CreateIllustrationDto(data[0]);
                 }
                 Illustration illustration = new Illustration(dto.getColor(), dto.getDescription());
-
+                illustration.setProduct(getProductById(id));
                 illustrations.add(illustrationRepository.save(illustration));
                 cloudinaryService.uploadImage(file, "illustrations");
             } catch (Exception e) {
