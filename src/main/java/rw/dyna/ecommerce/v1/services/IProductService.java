@@ -11,6 +11,7 @@ public interface IProductService {
 
     Product addIllustrations(MultipartFile[] files, UUID id);
 
+    Product removeIllustration(UUID id) throws Exception;
     String removeProduct(UUID id);
 
     Product updateProduct(UUID id, CreateProductDto dto);

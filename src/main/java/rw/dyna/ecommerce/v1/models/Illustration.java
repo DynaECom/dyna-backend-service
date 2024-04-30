@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
 import rw.dyna.ecommerce.v1.fileHandling.File;
-
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -21,6 +20,7 @@ public class Illustration extends InitiatorAudit {
 
     private String color;
 
+    private String public_Id;
 
     private String description;
 

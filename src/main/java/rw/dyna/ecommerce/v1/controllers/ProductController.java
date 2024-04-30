@@ -28,11 +28,15 @@ public class ProductController {
     public ResponseEntity<ApiResponse> deleteProduct(@RequestParam UUID id){
         return ResponseEntity.ok().body(ApiResponse.success(productService.removeProduct(id)));
     }
-    @PostMapping(value="/illustration/{productId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity createIllustration(@RequestPart("files") MultipartFile[] files, @PathVariable("productId") UUID id){
+    @PostMapping(value="/illustration/add/{productId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity addIllustration(@RequestPart("files") MultipartFile[] files, @PathVariable("productId") UUID id){
         return ResponseEntity.ok().body(ApiResponse.success(productService.addIllustrations(files, id)));
     }
 
+    @PostMapping(value="/illustration/remove/{illustrationId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity removeIllustration(@PathVariable("illustration") UUID id) throws Exception {
+        return ResponseEntity.ok().body(ApiResponse.success(productService.removeIllustration(id)));
+    }
 
     @PutMapping("/update")
     public ResponseEntity<ApiResponse> updateProduct(@RequestParam UUID id, @Valid @RequestBody CreateProductDto dto){

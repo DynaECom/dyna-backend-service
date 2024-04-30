@@ -3,6 +3,7 @@ package rw.dyna.ecommerce.v1.servicesImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import rw.dyna.ecommerce.v1.dtos.CreateManufacturerDto;
+import rw.dyna.ecommerce.v1.dtos.ImageUploadDTO;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
 import rw.dyna.ecommerce.v1.models.Manufacturer;
 import rw.dyna.ecommerce.v1.repositories.ManufacturerRepository;
@@ -33,7 +34,8 @@ public class ManufacturerServiceImpl implements IManufacturerService {
     @Override
     public Manufacturer createManufacturer(CreateManufacturerDto dto) throws Exception {
         if(manufacturerRepository.findByName(dto.getName()) != null) throw new Exception("Manufacturer already exists");
-        Manufacturer manufacturer = manufacturerRepository.save(new Manufacturer(dto.getName(), dto.getDescription(),cloudinaryService.uploadImage(dto.getFile(), "manufacturer_logos")));
+        ImageUploadDTO imageDto = cloudinaryService.uploadImage(dto.getFile(), "manufacturer_logos");
+        Manufacturer manufacturer = manufacturerRepository.save(new Manufacturer(dto.getName(), dto.getDescription(),imageDto.getImageUrl()));
         return manufacturer;
     }
 
@@ -48,7 +50,8 @@ public class ManufacturerServiceImpl implements IManufacturerService {
         Manufacturer manufacturer = manufacturerRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Manufacturer"));
         manufacturer.setName(dto.getName());
         manufacturer.setDescription(dto.getDescription());
-        manufacturer.setLogoUrl(cloudinaryService.uploadImage(dto.getFile(), "manufacturer_logos"));
+        ImageUploadDTO imageUploadDTO = cloudinaryService.uploadImage(dto.getFile(), "manufacturer_logos");
+        manufacturer.setLogoUrl(imageUploadDTO.getImageUrl());
         manufacturerRepository.save(manufacturer);
         return manufacturer;
     }

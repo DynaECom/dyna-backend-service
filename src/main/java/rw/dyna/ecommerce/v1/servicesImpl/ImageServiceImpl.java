@@ -1,10 +1,8 @@
 package rw.dyna.ecommerce.v1.servicesImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.dtos.ImageModalDTO;
 import rw.dyna.ecommerce.v1.exceptions.AppException;
 import rw.dyna.ecommerce.v1.exceptions.BadRequestException;
-import rw.dyna.ecommerce.v1.fileHandling.File;
 import rw.dyna.ecommerce.v1.models.Image;
 import rw.dyna.ecommerce.v1.repositories.ImageRepository;
 import rw.dyna.ecommerce.v1.services.ICloudinaryService;
@@ -33,7 +31,7 @@ public class ImageServiceImpl implements ImageService {
             }
             Image image = new Image();
             image.setName(imageModal.getName());
-            image.setUrl(cloudinaryService.uploadImage(imageModal.getFile(), "folder_1"));
+            image.setUrl(cloudinaryService.uploadImage(imageModal.getFile(), "folder_1").getImageUrl());
             if (image.getUrl() == null) {
                 throw new AppException("Failed to upload image!");
             }

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.dtos.CreateIllustrationDto;
 import rw.dyna.ecommerce.v1.dtos.CreateProductDto;
+import rw.dyna.ecommerce.v1.dtos.ImageUploadDTO;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
 import rw.dyna.ecommerce.v1.models.Illustration;
 import rw.dyna.ecommerce.v1.models.Manufacturer;
@@ -68,16 +69,25 @@ public class ProductServiceImpl implements IProductService {
                 }
                 Illustration illustration = new Illustration(dto.getColor(), dto.getDescription());
                 illustration.setProduct(getProductById(id));
+                ImageUploadDTO imageUploadDTO = cloudinaryService.uploadImage(file, "illustrations");
+                illustration.setImageUrl(imageUploadDTO.getImageUrl());
+                illustration.setPublic_Id(imageUploadDTO.getPublicId());
+
                 illustrations.add(illustrationRepository.save(illustration));
-                cloudinaryService.uploadImage(file, "illustrations");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
-
         Product product = this.getProductById(id);
         product.setIllustrations(illustrations);
         return productRepository.save(product);
+    }
+
+    public Product removeIllustration(UUID illustrationId) throws Exception {
+        Illustration illustration = illustrationRepository.findById(illustrationId).orElseThrow(()-> new ResourceNotFoundException("Illustration"));
+        illustrationRepository.delete(illustration);
+        cloudinaryService.deleteImage(illustration.getPublic_Id());
+        return illustration.getProduct();
     }
 
     @Override
