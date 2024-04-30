@@ -22,8 +22,7 @@ public class IllustrationController {
         return ResponseEntity.ok().body(ApiResponse.success(illustrationService.removeIllustration(id)));
     }
     @PutMapping(path = "/update")
-    public ResponseEntity updateIllustration(@Valid @RequestParam("description") String description, @RequestParam("name") String name, @RequestParam("file") MultipartFile file, @RequestParam("id") UUID id){
-        CreateIllustrationDto dto = new CreateIllustrationDto(description, name);
-        return ResponseEntity.ok().body(ApiResponse.success(illustrationService.updateIllustration(id, dto, file)));
+    public ResponseEntity updateIllustration(@Valid @RequestBody() CreateIllustrationDto dto, @RequestParam("name") String name, @RequestParam("id") UUID id){
+        return ResponseEntity.ok().body(ApiResponse.success(illustrationService.updateIllustration(id, dto)));
     }
 }

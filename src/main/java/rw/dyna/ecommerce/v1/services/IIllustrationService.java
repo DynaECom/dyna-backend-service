@@ -6,6 +6,6 @@ import java.util.UUID;
 
 public interface IIllustrationService {
     String removeIllustration(UUID id);
-    Illustration updateIllustration(UUID id, CreateIllustrationDto dto, MultipartFile file);
+    Illustration updateIllustration(UUID id, CreateIllustrationDto dto);
 
 }

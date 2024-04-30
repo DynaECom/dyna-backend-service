@@ -53,7 +53,7 @@ public class IllustrationServiceImpl implements IIllustrationService {
     }
 
     @Override
-    public Illustration updateIllustration(UUID id, CreateIllustrationDto dto, MultipartFile file) {
+    public Illustration updateIllustration(UUID id, CreateIllustrationDto dto) {
         Illustration illustration = illustrationRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Illustration"));
         illustration.setDescription(dto.getDescription());
         illustration.setColor(dto.getColor());
