@@ -49,11 +49,11 @@ public class Product extends InitiatorAudit {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "products_subCategories", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "subCategory_id"))
-    private Set<SubCategory> subCategoriesList;
+    private Set<SubCategory> subCategories;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "products_categories", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categoriesList;
+    private Set<Category> categories;
 
     @ManyToOne
     @JoinColumn(name = "manufacturer")
@@ -73,7 +73,7 @@ public class Product extends InitiatorAudit {
         this.discount = dto.getDiscount();
         this.status =  dto.getStatus();
         this.inStock = dto.getInstock();
-        this.subCategoriesList = subCategories;
+        this.subCategories = subCategories;
         this.manufacturer = manufacturer;
     }
 
@@ -88,8 +88,8 @@ public class Product extends InitiatorAudit {
         this.discount = dto.getDiscount();
         this.status =  dto.getStatus();
         this.inStock = dto.getInstock();
-        this.subCategoriesList = subCategories;
+        this.subCategories= subCategories;
         this.manufacturer = manufacturer;
-        this.categoriesList = categories;
+        this.categories = categories;
     }
 }
