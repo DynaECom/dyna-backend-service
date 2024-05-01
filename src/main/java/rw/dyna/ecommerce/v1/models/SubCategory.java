@@ -31,9 +31,11 @@ public class SubCategory extends InitiatorAudit {
 
     @ManyToOne
     @JoinColumn(name= "category_id")
+    @JsonIgnore
     private Category category;
 
-    @ManyToMany(mappedBy = "subCategoriesList", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "subCategoriesList", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
 

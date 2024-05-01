@@ -7,9 +7,11 @@ import rw.dyna.ecommerce.v1.dtos.CreateProductDto;
 import rw.dyna.ecommerce.v1.dtos.ImageUploadDTO;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
 import rw.dyna.ecommerce.v1.models.*;
+import rw.dyna.ecommerce.v1.repositories.ICategoriesRepository;
 import rw.dyna.ecommerce.v1.repositories.IIllustrationRepository;
 import rw.dyna.ecommerce.v1.repositories.IProductRepository;
 import rw.dyna.ecommerce.v1.repositories.ISubCategoriesRepository;
+import rw.dyna.ecommerce.v1.services.ICategoryService;
 import rw.dyna.ecommerce.v1.services.ICloudinaryService;
 import rw.dyna.ecommerce.v1.services.IManufacturerService;
 import rw.dyna.ecommerce.v1.services.IProductService;
@@ -24,12 +26,14 @@ public class ProductServiceImpl implements IProductService {
     private final IIllustrationRepository illustrationRepository;
     private final ICloudinaryService cloudinaryService;
     private final IProductRepository productRepository;
-    public ProductServiceImpl(IManufacturerService manufacturerService, ISubCategoriesRepository subCategoriesRepository, IIllustrationRepository illustrationRepository, ICloudinaryService cloudinaryService, IProductRepository productRepository) {
+    private final ICategoriesRepository categoriesRepository;
+    public ProductServiceImpl(IManufacturerService manufacturerService, ISubCategoriesRepository subCategoriesRepository, IIllustrationRepository illustrationRepository, ICloudinaryService cloudinaryService, IProductRepository productRepository, ICategoryService categoryService, ICategoriesRepository categoriesRepository) {
         this.manufacturerService = manufacturerService;
         this.subCategoriesRepository = subCategoriesRepository;
         this.illustrationRepository = illustrationRepository;
         this.cloudinaryService = cloudinaryService;
         this.productRepository = productRepository;
+        this.categoriesRepository = categoriesRepository;
     }
 
     @Override
@@ -39,12 +43,15 @@ public class ProductServiceImpl implements IProductService {
         Set<SubCategory> subCategories = new HashSet<>();
         Set<Category> categories = new HashSet<>();
 
-
+        for(UUID id: dto.getCategory()){
+            Category category = categoriesRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Sub category"));
+            categories.add(category);
+        }
         for(UUID id: dto.getSub_category()){
             SubCategory subCategory = subCategoriesRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Sub category"));
             subCategories.add(subCategory);
-            categories.add(subCategory.getCategory());
         }
+
         Product product = new Product(dto, manufacturer, subCategories, categories);
 
         productRepository.save(product);

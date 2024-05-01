@@ -1,5 +1,6 @@
 package rw.dyna.ecommerce.v1.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
@@ -24,13 +25,12 @@ public class Category extends InitiatorAudit {
 
     private String description;
 
-
-
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "sub_categories", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "subcategory_id"))
     private Set<SubCategory> subCategories;
 
-    @ManyToMany(mappedBy = "categoriesList", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "categoriesList", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
 }
