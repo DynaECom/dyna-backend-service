@@ -34,15 +34,17 @@ public class CategoryServiceImpl implements ICategoryService {
         Category newcat = new Category();
         newcat.setDescription(category.getDescription());
         newcat.setName(category.getName());
-
+        Category category1 = categoryRepository.save(newcat);
         for(CreateSubCategoryDto sub : category.getSubCategories()){
               SubCategory subCategory = new SubCategory();
                 subCategory.setName(sub.getName());
                 subCategory.setDescription(sub.getDescription());
+                subCategory.setCategory(category1);
                 subCategoriesRepository.save(subCategory);
                 subCategoriesSet.add(subCategory);
         }
         newcat.setSubCategories(subCategoriesSet);
+
         categoryRepository.save(newcat);
         return newcat;
     }

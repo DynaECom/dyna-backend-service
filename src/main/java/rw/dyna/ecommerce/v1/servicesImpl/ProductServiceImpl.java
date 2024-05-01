@@ -6,10 +6,7 @@ import rw.dyna.ecommerce.v1.dtos.CreateIllustrationDto;
 import rw.dyna.ecommerce.v1.dtos.CreateProductDto;
 import rw.dyna.ecommerce.v1.dtos.ImageUploadDTO;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
-import rw.dyna.ecommerce.v1.models.Illustration;
-import rw.dyna.ecommerce.v1.models.Manufacturer;
-import rw.dyna.ecommerce.v1.models.Product;
-import rw.dyna.ecommerce.v1.models.SubCategory;
+import rw.dyna.ecommerce.v1.models.*;
 import rw.dyna.ecommerce.v1.repositories.IIllustrationRepository;
 import rw.dyna.ecommerce.v1.repositories.IProductRepository;
 import rw.dyna.ecommerce.v1.repositories.ISubCategoriesRepository;
@@ -17,10 +14,7 @@ import rw.dyna.ecommerce.v1.services.ICloudinaryService;
 import rw.dyna.ecommerce.v1.services.IManufacturerService;
 import rw.dyna.ecommerce.v1.services.IProductService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements IProductService {
@@ -42,13 +36,17 @@ public class ProductServiceImpl implements IProductService {
     public Product createProduct(CreateProductDto dto) {
         Manufacturer manufacturer = manufacturerService.findManufacturerById(dto.getManufacturer());
 
-        List<SubCategory> subCategories = new ArrayList<>();
+        Set<SubCategory> subCategories = new HashSet<>();
+        Set<Category> categories = new HashSet<>();
+
 
         for(UUID id: dto.getSub_category()){
             SubCategory subCategory = subCategoriesRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Sub category"));
             subCategories.add(subCategory);
+            categories.add(subCategory.getCategory());
         }
-        Product product = new Product(dto, manufacturer, subCategories);
+        Product product = new Product(dto, manufacturer, subCategories, categories);
+
         productRepository.save(product);
         return product;
     }
@@ -99,7 +97,7 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public Product updateProduct(UUID id, CreateProductDto dto) {
         Product product =  this.findProductById(id);
-        List<SubCategory> subCategories = new ArrayList<>();
+        Set<SubCategory> subCategories = new HashSet<>();
 
         for(UUID subCategoryId : dto.getSub_category()){
             SubCategory subCategory = subCategoriesRepository.findById(subCategoryId).orElseThrow(()->new ResourceNotFoundException("Sub category"));

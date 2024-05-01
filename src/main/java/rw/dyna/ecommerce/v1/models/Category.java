@@ -5,6 +5,7 @@ import lombok.Setter;
 import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -28,5 +29,8 @@ public class Category extends InitiatorAudit {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "sub_categories", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "subcategory_id"))
     private Set<SubCategory> subCategories;
+
+    @ManyToMany(mappedBy = "categoriesList", fetch = FetchType.EAGER)
+    private List<Product> products = new ArrayList<>();
 
 }
