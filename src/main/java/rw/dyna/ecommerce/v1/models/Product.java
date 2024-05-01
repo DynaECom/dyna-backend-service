@@ -47,10 +47,13 @@ public class Product extends InitiatorAudit {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
     private List<Illustration> illustrations;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "products_subCategories", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "subCategory_id"))
-    @JsonIgnore
-    private List<SubCategory> subCategoriesList;
+    private Set<SubCategory> subCategoriesList;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "products_categories", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categoriesList;
 
     @ManyToOne
     @JoinColumn(name = "manufacturer")
@@ -60,7 +63,7 @@ public class Product extends InitiatorAudit {
     @JsonIgnore
     private Set<Review> review;
 
-    public Product(CreateProductDto dto, Manufacturer manufacturer, List<SubCategory> subCategories) {
+    public Product(CreateProductDto dto, Manufacturer manufacturer, Set<SubCategory> subCategories) {
         this.name = dto.getName();
         this.company = dto.getCompany();
         this.brand = dto.getBrand();
@@ -72,5 +75,21 @@ public class Product extends InitiatorAudit {
         this.inStock = dto.getInstock();
         this.subCategoriesList = subCategories;
         this.manufacturer = manufacturer;
+    }
+
+    public Product(CreateProductDto dto, Manufacturer manufacturer, Set<SubCategory> subCategories, Set<Category> categories) {
+        super();
+        this.name = dto.getName();
+        this.company = dto.getCompany();
+        this.brand = dto.getBrand();
+        this.warranty = dto.getWarranty();
+        this.price = dto.getPrice();
+        this.crossed_price = dto.getCrossed_price();
+        this.discount = dto.getDiscount();
+        this.status =  dto.getStatus();
+        this.inStock = dto.getInstock();
+        this.subCategoriesList = subCategories;
+        this.manufacturer = manufacturer;
+        this.categoriesList = categories;
     }
 }

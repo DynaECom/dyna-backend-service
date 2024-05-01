@@ -18,6 +18,5 @@ public class CreateCategoryDto {
     @NotBlank
     private String description;
 
-
     private Set<CreateSubCategoryDto> subCategories;
 }
