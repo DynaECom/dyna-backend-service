@@ -29,7 +29,7 @@ public class Category extends InitiatorAudit {
     @JoinTable(name = "sub_categories", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "subcategory_id"))
     private Set<SubCategory> subCategories;
 
-    @ManyToMany(mappedBy = "categoriesList", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
 

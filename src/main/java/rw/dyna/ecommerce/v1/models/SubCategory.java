@@ -34,7 +34,7 @@ public class SubCategory extends InitiatorAudit {
     @JsonIgnore
     private Category category;
 
-    @ManyToMany(mappedBy = "subCategoriesList", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "subCategories", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
