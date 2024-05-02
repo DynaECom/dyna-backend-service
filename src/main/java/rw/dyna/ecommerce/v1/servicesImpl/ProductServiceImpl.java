@@ -115,7 +115,7 @@ public class ProductServiceImpl implements IProductService {
         Product newProduct = new Product(dto, manufacturer, subCategories);
         product.setBrand(newProduct.getBrand());
         product.setManufacturer(newProduct.getManufacturer());
-        product.setSubCategoriesList(newProduct.getSubCategoriesList());
+        product.setSubCategories(newProduct.getSubCategories());
         product.setPrice(newProduct.getPrice());
         product.setCompany(newProduct.getCompany());
         product.setName(newProduct.getName());
@@ -123,7 +123,7 @@ public class ProductServiceImpl implements IProductService {
         product.setDiscount(newProduct.getDiscount());
         product.setInStock(newProduct.getInStock());
         product.setWarranty(newProduct.getWarranty());
-        product.setSubCategoriesList(newProduct.getSubCategoriesList());
+        product.setSubCategories(newProduct.getSubCategories());
         return productRepository.save(product);
     }
 
