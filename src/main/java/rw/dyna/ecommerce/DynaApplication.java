@@ -26,21 +26,7 @@ public class DynaApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
-	public void registerRoles(){
-		Set<Erole> roles = new HashSet<>();
-		roles.add(Erole.ADMIN);
-		roles.add(Erole.CLIENT);
 
-
-		for (Erole role: roles){
-			Optional<Role> roleByName = roleRepository.findByName(role);
-			if(!roleByName.isPresent()){
-				Role newRole = new Role(role,role.toString());
-				roleRepository.save(newRole);
-			}
-		}
-	}
 	public static void main(String[] args) {
 		SpringApplication.run(DynaApplication.class, args);
 	}

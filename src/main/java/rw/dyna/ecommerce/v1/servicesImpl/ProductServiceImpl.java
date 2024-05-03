@@ -1,10 +1,12 @@
 package rw.dyna.ecommerce.v1.servicesImpl;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.dtos.CreateIllustrationDto;
 import rw.dyna.ecommerce.v1.dtos.CreateProductDto;
 import rw.dyna.ecommerce.v1.dtos.ImageUploadDTO;
+import rw.dyna.ecommerce.v1.exceptions.BadRequestException;
 import rw.dyna.ecommerce.v1.exceptions.ResourceNotFoundException;
 import rw.dyna.ecommerce.v1.models.*;
 import rw.dyna.ecommerce.v1.repositories.ICategoriesRepository;
@@ -27,6 +29,9 @@ public class ProductServiceImpl implements IProductService {
     private final ICloudinaryService cloudinaryService;
     private final IProductRepository productRepository;
     private final ICategoriesRepository categoriesRepository;
+
+    @Value("${uploads.directory.illustrations}")
+    private String directory;
     public ProductServiceImpl(IManufacturerService manufacturerService, ISubCategoriesRepository subCategoriesRepository, IIllustrationRepository illustrationRepository, ICloudinaryService cloudinaryService, IProductRepository productRepository, ICategoryService categoryService, ICategoriesRepository categoriesRepository) {
         this.manufacturerService = manufacturerService;
         this.subCategoriesRepository = subCategoriesRepository;
@@ -88,11 +93,14 @@ public class ProductServiceImpl implements IProductService {
         return productRepository.save(product);
     }
 
-    public Product removeIllustration(UUID illustrationId) throws Exception {
-        Illustration illustration = illustrationRepository.findById(illustrationId).orElseThrow(()-> new ResourceNotFoundException("Illustration"));
-        illustrationRepository.delete(illustration);
+    public String removeIllustration(UUID id) throws Exception {
+        Illustration illustration = illustrationRepository.findById(id).get();
+        if(illustration ==  null ){
+            throw new BadRequestException("Illustration not found!");
+        }
         cloudinaryService.deleteImage(illustration.getPublic_Id());
-        return illustration.getProduct();
+        illustrationRepository.delete(illustration);
+        return "Successfully removed data!";
     }
 
     @Override
@@ -148,6 +156,25 @@ public class ProductServiceImpl implements IProductService {
         product.setInStock(0);
         productRepository.save(product);
         return product;
+    }
+
+    @Override
+    public String updateIllustration(UUID id, CreateIllustrationDto dto, MultipartFile file) throws Exception {
+        Optional<Illustration> illustrationOptional = illustrationRepository.findById(id);
+        Illustration illustration = null;
+
+        if(illustrationOptional.get() != null) {
+            illustration = illustrationOptional.get();
+            cloudinaryService.deleteImage(illustration.getPublic_Id());
+        }
+        if(file == null)
+            throw new BadRequestException("Please provide an image");
+        ImageUploadDTO imageDto = cloudinaryService.uploadImage(file, directory);
+        illustration.setImageUrl(imageDto.getImageUrl());
+        illustration.setPublic_Id(imageDto.getPublicId());
+        illustration.setDescription(dto.getDescription());
+        illustration.setColor(dto.getColor());
+        return "Data updated successfully!";
     }
 
 }

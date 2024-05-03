@@ -3,6 +3,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import rw.dyna.ecommerce.v1.dtos.CreateIllustrationDto;
 import rw.dyna.ecommerce.v1.dtos.CreateProductDto;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
 import rw.dyna.ecommerce.v1.services.IProductService;
@@ -37,9 +38,18 @@ public class ProductController {
     public ResponseEntity removeIllustration(@PathVariable("illustration") UUID id) throws Exception {
         return ResponseEntity.ok().body(ApiResponse.success(productService.removeIllustration(id)));
     }
+    @DeleteMapping(path = "/illustration/delete/{id}")
+    public ResponseEntity deleteIllustration(@Valid @PathVariable("id") UUID id) throws Exception {
+        return ResponseEntity.ok().body(ApiResponse.success(productService.removeIllustration(id)));
+    }
+    @PutMapping(path = "/illustration/update/{id}")
+    public ResponseEntity updateIllustration(@Valid @RequestPart("color") String color, @Valid @RequestPart("description") String description, @RequestPart("file") MultipartFile file, @PathVariable("id") UUID id) throws Exception {
+        CreateIllustrationDto dto = new CreateIllustrationDto(description, color);
+        return ResponseEntity.ok().body(ApiResponse.success(productService.updateIllustration(id, dto, file)));
+    }
 
-    @PutMapping("/update")
-    public ResponseEntity<ApiResponse> updateProduct(@RequestParam UUID id, @Valid @RequestBody CreateProductDto dto){
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ApiResponse> updateProduct(@PathVariable("id") UUID id, @Valid @RequestBody CreateProductDto dto){
         return ResponseEntity.ok().body(ApiResponse.success(productService.updateProduct(id, dto)));
     }
 
@@ -52,4 +62,6 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getAllProducts(){
         return ResponseEntity.ok().body(ApiResponse.success(productService.getAllProducts()));
     }
+
+
 }

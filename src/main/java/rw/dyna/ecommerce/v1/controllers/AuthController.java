@@ -5,15 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rw.dyna.ecommerce.v1.dtos.*;
 import rw.dyna.ecommerce.v1.models.User;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
-import rw.dyna.ecommerce.v1.payloads.JWTAuthenticationResponse;
 import rw.dyna.ecommerce.v1.payloads.LoginResponse;
 import rw.dyna.ecommerce.v1.security.JwtTokenProvider;
 import rw.dyna.ecommerce.v1.services.IAuthenticationService;
@@ -21,8 +17,6 @@ import rw.dyna.ecommerce.v1.services.IUserServices;
 import rw.dyna.ecommerce.v1.servicesImpl.MailService;
 import rw.dyna.ecommerce.v1.utils.ExceptionUtils;
 import rw.dyna.ecommerce.v1.utils.Utility;
-
-import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 @RestController
@@ -31,7 +25,6 @@ import javax.validation.Valid;
 public class AuthController {
     private final IUserServices userService;
     private final JwtTokenProvider jwtTokenProvider;
-
     private final AuthenticationManager authenticationManager;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MailService mailService;
