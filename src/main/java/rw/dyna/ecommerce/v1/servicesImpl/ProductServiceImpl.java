@@ -22,7 +22,6 @@ import java.util.*;
 
 @Service
 public class ProductServiceImpl implements IProductService {
-
     private final IManufacturerService manufacturerService;
     private final ISubCategoriesRepository subCategoriesRepository;
     private final IIllustrationRepository illustrationRepository;
@@ -95,7 +94,7 @@ public class ProductServiceImpl implements IProductService {
 
     public String removeIllustration(UUID id) throws Exception {
         Illustration illustration = illustrationRepository.findById(id).get();
-        if(illustration ==  null ){
+        if(illustration ==  null){
             throw new BadRequestException("Illustration not found!");
         }
         cloudinaryService.deleteImage(illustration.getPublic_Id());
