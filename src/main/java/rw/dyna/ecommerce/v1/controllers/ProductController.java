@@ -34,13 +34,13 @@ public class ProductController {
         return ResponseEntity.ok().body(ApiResponse.success(productService.addIllustrations(files, id)));
     }
 
-    @PostMapping(value="/illustration/remove/{illustrationId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity removeIllustration(@PathVariable("illustration") UUID id) throws Exception {
-        return ResponseEntity.ok().body(ApiResponse.success(productService.removeIllustration(id)));
-    }
     @DeleteMapping(path = "/illustration/delete/{id}")
     public ResponseEntity deleteIllustration(@Valid @PathVariable("id") UUID id) throws Exception {
         return ResponseEntity.ok().body(ApiResponse.success(productService.removeIllustration(id)));
+    }
+    @GetMapping("/illustrations/all")
+    public ResponseEntity<ApiResponse> getAllIllustrations(){
+        return ResponseEntity.ok().body(ApiResponse.success(productService.getAllIllustrations()));
     }
     @PutMapping(path = "/illustration/update/{id}")
     public ResponseEntity updateIllustration(@Valid @RequestPart("color") String color, @Valid @RequestPart("description") String description, @RequestPart("file") MultipartFile file, @PathVariable("id") UUID id) throws Exception {

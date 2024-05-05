@@ -2,6 +2,7 @@ package rw.dyna.ecommerce.v1.services;
 import org.springframework.web.multipart.MultipartFile;
 import rw.dyna.ecommerce.v1.dtos.CreateIllustrationDto;
 import rw.dyna.ecommerce.v1.dtos.CreateProductDto;
+import rw.dyna.ecommerce.v1.models.Illustration;
 import rw.dyna.ecommerce.v1.models.Product;
 
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.UUID;
 
 public interface IProductService {
     Product createProduct(CreateProductDto dto);
+
+    List<Illustration> getAllIllustrations();
 
     String removeProduct(UUID id);
 

@@ -93,15 +93,24 @@ public class ProductServiceImpl implements IProductService {
     }
 
     public String removeIllustration(UUID id) throws Exception {
-        Illustration illustration = illustrationRepository.findById(id).get();
-        if(illustration ==  null){
+        try {
+            Illustration illustration = illustrationRepository.findById(id).get();
+            if (illustration == null) {
+                throw new BadRequestException("Illustration not found!");
+            }
+            cloudinaryService.deleteImage(illustration.getPublic_Id());
+            illustrationRepository.deleteById(id);
+            return "Successfully removed data!";
+        }catch(Exception e){
+            e.printStackTrace();
             throw new BadRequestException("Illustration not found!");
         }
-        cloudinaryService.deleteImage(illustration.getPublic_Id());
-        illustrationRepository.delete(illustration);
-        return "Successfully removed data!";
     }
 
+    @Override
+    public List<Illustration> getAllIllustrations(){
+        return illustrationRepository.findAll();
+    }
     @Override
     public String removeProduct(UUID id) {
         productRepository.deleteById(id);
