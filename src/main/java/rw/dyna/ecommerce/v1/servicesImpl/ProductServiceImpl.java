@@ -98,7 +98,7 @@ public class ProductServiceImpl implements IProductService {
             if (illustration == null) {
                 throw new BadRequestException("Illustration not found!");
             }
-            cloudinaryService.deleteImage(illustration.getPublic_Id());
+//            cloudinaryService.deleteImage(illustration.getPublic_Id());
             illustrationRepository.deleteById(id);
             return "Successfully removed data!";
         }catch(Exception e){
