@@ -4,18 +4,30 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rw.dyna.ecommerce.v1.dtos.PlaceOrderDTO;
+import rw.dyna.ecommerce.v1.enums.EOrderStatus;
 import rw.dyna.ecommerce.v1.payloads.ApiResponse;
+import rw.dyna.ecommerce.v1.services.IOrderService;
+
+import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/orders")
 public class OrderController {
-    @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createClient(){
-        return null;
+    private final IOrderService orderService;
+
+    public OrderController(IOrderService orderService) {
+        this.orderService = orderService;
     }
-    @GetMapping("/")
-    public ResponseEntity<ApiResponse> getAllClients(){
-        return null;
+
+    @PostMapping("/create")
+    public ResponseEntity<ApiResponse> placeOrder(@Valid @RequestBody() PlaceOrderDTO dto){
+        return ResponseEntity.ok(new ApiResponse(true,orderService.placeOrder(dto) , "Order placed successfully"));
+    }
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse> getAllOrders(){
+        return ResponseEntity.ok(new ApiResponse(true, orderService.getAllOrders(), "Orders retrieved successfully"));
     }
 
     @GetMapping("/paginated")
@@ -25,17 +37,21 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getClientById(){
-        return null;
+    public ResponseEntity<ApiResponse> getOrderById(@PathVariable("id") UUID id){
+        return ResponseEntity.ok(new ApiResponse(true, orderService.getOrderById(id), "Order retrieved successfully"));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> getById(){
-        return null;
+    @GetMapping("/filter/by-client/{clientId}")
+    public ResponseEntity<ApiResponse> getById(@PathVariable("clientId") UUID clientId){
+        return ResponseEntity.ok(new ApiResponse(true, orderService.getOrdersByClient(clientId), "Orders retrieved successfully"));
+    }
+    @GetMapping("/filter/by-status/{status}")
+    public ResponseEntity<ApiResponse> filterByStatus(@RequestParam("clientId") EOrderStatus status){
+        return ResponseEntity.ok(new ApiResponse(true, orderService.getOrdersByStatus(status), "Orders retrieved successfully"));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteById(){
-        return null;
+    public ResponseEntity<ApiResponse> deleteById(@PathVariable("id") UUID id){
+        return ResponseEntity.ok(new ApiResponse(true, orderService.cancelOrder(id), "Order deleted successfully"));
     }
 }

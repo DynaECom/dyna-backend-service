@@ -47,6 +47,7 @@ public class Product extends InitiatorAudit {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
     private List<Illustration> illustrations;
 
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "products_subCategories", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "subCategory_id"))
     private Set<SubCategory> subCategories;

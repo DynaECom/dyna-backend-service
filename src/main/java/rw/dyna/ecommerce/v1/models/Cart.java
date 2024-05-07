@@ -1,6 +1,7 @@
 package rw.dyna.ecommerce.v1.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import rw.dyna.ecommerce.v1.audits.InitiatorAudit;
 import rw.dyna.ecommerce.v1.enums.ECartStatus;
@@ -11,8 +12,7 @@ import java.util.UUID;
 
 @Table(name = "cart")
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Cart extends InitiatorAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,12 +21,15 @@ public class Cart extends InitiatorAudit {
     @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<CartProduct> cartProducts;
 
-    private ECartStatus cartStatus;
+    private ECartStatus status;
 
     @ManyToOne
     private Client client;
 
     @Transient
     private float totalPrice;
+
+    @OneToOne
+    private Order order;
     
 }
