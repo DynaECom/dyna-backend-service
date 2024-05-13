@@ -20,6 +20,7 @@ public class Client extends User{
     private List<Review> review;
 
     @OneToOne
+    @JsonIgnore
     private Cart cart;
 
 }

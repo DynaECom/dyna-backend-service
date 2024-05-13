@@ -1,5 +1,6 @@
 package rw.dyna.ecommerce.v1.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class Cart extends InitiatorAudit {
     private List<CartProduct> cartProducts;
 
     @OneToOne
+    @JsonIgnore
     private Client client;
 
     @Transient

@@ -60,6 +60,7 @@ public class CartServiceImpl implements ICartService {
 
     @Override
     public Cart addProduct(CartProductDTO dto) {
+        System.out.println("problem check one");
         User user = userServices.getLoggedInUser();
         Client client = clientService.getClientById(user.getId());
         Product product = productService.getProductById(dto.getProductId());
@@ -77,6 +78,8 @@ public class CartServiceImpl implements ICartService {
         cartProduct.setTotalPrice(dto.getQuantity() * ((product.getPrice()* product.getDiscount())/100));
         cartProductList.add(cartProduct);
         cart.setCartProducts(cartProductList);
+        System.out.println("Problem check 3");
+        System.out.println(cartRepository.save(cart));
         return cartRepository.save(cart);
     }
 

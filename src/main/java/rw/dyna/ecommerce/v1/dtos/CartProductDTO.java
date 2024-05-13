@@ -1,17 +1,13 @@
 package rw.dyna.ecommerce.v1.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartProductDTO {
-    private UUID productId;
-    private int quantity;
+    public UUID productId;
+    public int quantity;
 }

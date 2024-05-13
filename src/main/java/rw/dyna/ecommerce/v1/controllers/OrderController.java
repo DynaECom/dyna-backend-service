@@ -42,7 +42,7 @@ public class OrderController {
     }
 
     @GetMapping("/filter/by-client/{clientId}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable("clientId") UUID clientId){
+    public ResponseEntity<ApiResponse> getByClientId(@PathVariable("clientId") UUID clientId){
         return ResponseEntity.ok(new ApiResponse(true, orderService.getOrdersByClient(clientId), "Orders retrieved successfully"));
     }
     @GetMapping("/filter/by-status/{status}")

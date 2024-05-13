@@ -2,6 +2,7 @@ package rw.dyna.ecommerce.v1.controllers;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rw.dyna.ecommerce.v1.dtos.CartProductDTO;
@@ -27,8 +28,8 @@ public class CartController {
         return ResponseEntity.ok(ApiResponse.success(cartService.createCart(dto), "Added to cart successfully!"));
     }
     @PostMapping("/add-product")
-    public ResponseEntity<ApiResponse> addProduct(@Valid CartProductDTO dto){
-        return ResponseEntity.ok(ApiResponse.success(cartService.addProduct(dto)));
+    public ResponseEntity<ApiResponse> addProduct(@Valid @RequestBody CartProductDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(cartService.addProduct(dto)));
     }
     @PutMapping("/remove-product/{product-id}")
     public ResponseEntity<ApiResponse> removeProduct(@PathVariable("product-id") UUID id){

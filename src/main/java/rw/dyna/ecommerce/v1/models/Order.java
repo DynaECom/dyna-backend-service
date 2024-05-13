@@ -35,4 +35,8 @@ public class Order extends InitiatorAudit {
     @Column(name = "revert_comment")
     private String revertComment;
 
+    @ManyToOne
+    private LocationAddress deliveryLocation;
+
+
 }
