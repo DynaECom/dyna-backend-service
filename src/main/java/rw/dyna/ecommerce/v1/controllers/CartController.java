@@ -26,11 +26,11 @@ public class CartController {
     public ResponseEntity<ApiResponse> addMultipleProducts(@Valid @RequestBody CreateCartDTO dto){
         return ResponseEntity.ok(ApiResponse.success(cartService.createCart(dto), "Added to cart successfully!"));
     }
-    @GetMapping("/add-product")
+    @PostMapping("/add-product")
     public ResponseEntity<ApiResponse> addProduct(@Valid CartProductDTO dto){
         return ResponseEntity.ok(ApiResponse.success(cartService.addProduct(dto)));
     }
-    @GetMapping("/remove-product/{product-id}")
+    @PutMapping("/remove-product/{product-id}")
     public ResponseEntity<ApiResponse> removeProduct(@PathVariable("product-id") UUID id){
         return ResponseEntity.ok(ApiResponse.success(cartService.removeProduct(id)));
     }
