@@ -21,9 +21,7 @@ public class Cart extends InitiatorAudit {
     @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<CartProduct> cartProducts;
 
-    private ECartStatus status;
-
-    @ManyToOne
+    @OneToOne
     private Client client;
 
     @Transient

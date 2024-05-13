@@ -19,4 +19,7 @@ public class Client extends User{
     @JsonIgnore
     private List<Review> review;
 
+    @OneToOne
+    private Cart cart;
+
 }
